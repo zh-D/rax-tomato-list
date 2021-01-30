@@ -6,10 +6,10 @@ import Item from '../../components/Item';
 import Text from 'rax-text';
 import Modal from 'rax-modal';
 import TextInput from "rax-textinput";
-//import am-icon from "mini-ali-ui";
+//import Am-icon from 'mini-ali-ui/es/am-icon/index';
 import Image from 'rax-image';
-import {useAPI,fetch} from '../../rapper';
-//import styles from './index.module.css';
+import { useAPI, fetch } from '../../rapper';
+import './index.module.css';
 
 
 const styles = {
@@ -53,80 +53,80 @@ const styles = {
 
 
 export default function () {
-   const Data=[
+  const Data = [
     {
-        "id":1,
-        "name":"11111",
-        "createDate":'2021/1/30',
-        "isFinish":false,
-        "priority":1,
+      "id": 1,
+      "name": "11111",
+      "createDate": '2021/1/30',
+      "isFinish": false,
+      "priority": 1,
     },
     {
-        "id":2,
-        "name":"22222",
-        "createDate":'2021/1/30',
-        "isFinish":true,
-        "priority":1,
+      "id": 2,
+      "name": "22222",
+      "createDate": '2021/1/30',
+      "isFinish": true,
+      "priority": 1,
     },
     {
-        "id":3,
-        "name":"33333",
-        "createDate":'2021/1/30',
-        "isFinish":false,
-        "priority":1,
+      "id": 3,
+      "name": "33333",
+      "createDate": '2021/1/30',
+      "isFinish": false,
+      "priority": 1,
     },
     {
-        "id":4,
-        "name":"44444",
-        "createDate":'2021/1/30',
-        "isFinish":false,
-        "priority":1,
+      "id": 4,
+      "name": "44444",
+      "createDate": '2021/1/30',
+      "isFinish": false,
+      "priority": 1,
     },
     {
-        "id":5,
-        "name":"55555",
-        "createDate":'2021/1/30',
-        "isFinish":true,
-        "priority":1,
+      "id": 5,
+      "name": "55555",
+      "createDate": '2021/1/30',
+      "isFinish": true,
+      "priority": 1,
     }
-        ];
+  ];
   const [userState, userDispatchers] = store.useModel('user');
   const [visible, setVisible] = useState(false);
-  const [name,setName]=useState('')
-  const [priority,setPriority]=useState(null)
-  const [createDate,setCreateDate]=useState('')
+  const [name, setName] = useState('')
+  const [priority, setPriority] = useState('')
+  const [createDate, setCreateDate] = useState('')
   const [itemList, setItemList] = useState(Data);
-  function add(){
+  function add() {
     var d = new Date();
-		var str = '';
-		str += d.getFullYear() + '/'; //获取当前年份 
-		str += d.getMonth() + 1 + '/'; //获取当前月份（0——11） 
-		str += d.getDate() + '/';
-				// str += d.getHours() + '时';
-				// str += d.getMinutes() + '分';
-        // str += d.getSeconds() + '秒';
+    var str = '';
+    str += d.getFullYear() + '/'; //获取当前年份 
+    str += d.getMonth() + 1 + '/'; //获取当前月份（0——11） 
+    str += d.getDate() + '/';
+    // str += d.getHours() + '时';
+    // str += d.getMinutes() + '分';
+    // str += d.getSeconds() + '秒';
     setCreateDate(str)
     console.log(createDate)
-    var text={
+    var text = {
       name,
       priority,
       createDate
-    }    
+    }
     console.log(text)
     Data.push(text);
     console.log(Data)
     setName('')
-    setPriority(null)
+    setPriority('')
     setCreateDate('')
     setVisible(false)
     setItemList(Data)
 
   }
-  function done(id){
-    var temp=Data;
-    temp.forEach(item=>{
-      if (item.id===id){
-        item.isFinish=true;
+  function done(id) {
+    var temp = Data;
+    temp.forEach(item => {
+      if (item.id === id) {
+        item.isFinish = true;
       }
     })
     console.log(temp)
@@ -135,12 +135,12 @@ export default function () {
     //此处补充完成及重新请求的代码
   }
 
-  function deleteItem(id){
+  function deleteItem(id) {
     console.log(id);
-    var temp=Data;
-    temp.forEach((item,index)=>{
-      if (item.id===id){
-       Data.splice(index,1)
+    var temp = Data;
+    temp.forEach((item, index) => {
+      if (item.id === id) {
+        Data.splice(index, 1)
       }
     })
     setItemList(Data)
@@ -169,54 +169,54 @@ export default function () {
           width: '67rpx',
         }}
         /> */}
-      <ScrollView 
-      style={{
-        height: '200rpx',
-      }}
+      <ScrollView
+        style={{
+          height: '200rpx',
+        }}
       >
-      {itemList.map(item => {
-        return (
-          <view>
-          {item.isFinish ? (
-            <Text className="item"
-              style={{textDecoration: 'line-through'}} 
+        {itemList.map(item => {
+          return (
+            <view>
+              {item.isFinish ? (
+                <Text className="item"
+                  style={{ textDecoration: 'line-through' }}
                 >{item.name}</Text>
-            ) :( <Text className="item">{item.name}</Text>)}
-         
-          <button onClick={()=>done(item.id)} disabled={item.isFinish}>完成</button>
-          <button  onClick={()=>deleteItem(item.id)}>删除</button>
-          
-        
-          </view>
-        )
-          }
-      )
+              ) : (<Text className="item">{item.name}</Text>)}
+
+              <button onClick={() => done(item.id)} disabled={item.isFinish} style={{"display":"inline-block"}}>完成</button>
+              <button onClick={() => deleteItem(item.id)} style={{"display":"inline-block"}}> 删除</button>
+
+
+            </view>
+          )
         }
-      
-    </ScrollView>
-    <button type="button" onClick={()=>{ setVisible(true)}}>
-      添加
+        )
+        }
+
+      </ScrollView>
+      <button className="add-button"  onClick={() => { setVisible(true) }}>
+        +添加
     </button>
-    <Modal
-      visible={visible}
-      onHide={() => {
-        console.log('hide');
-      }}
-      onShow={() => {
-        console.log('show');
-      }}
-      onMaskClick={() => {
-        setVisible(false);
-      }}
-      contentStyle={{
-        position: 'absolute',
-        top: '50rpx',
-        width: '400rpx',
-        left: '175rpx',
-        height:'300rpx'
-      }}
-    >
-      {/* <view>
+      <Modal
+        visible={visible}
+        onHide={() => {
+          console.log('hide');
+        }}
+        onShow={() => {
+          console.log('show');
+        }}
+        onMaskClick={() => {
+          setVisible(false);
+        }}
+        contentStyle={{
+          position: 'absolute',
+          top: '50rpx',
+          width: '400rpx',
+          left: '175rpx',
+          height: '300rpx'
+        }}
+      >
+        <view>
         <label>名称：</label>
       <TextInput
           multiline={true}
@@ -239,29 +239,9 @@ export default function () {
           }}
         />
       </view>
-        <button type={'submit'}  onClick={()=>add()}>添加</button> */}
-       <form onSubmit={add} >
-          <view>
-        <label>名称：</label>
-        <TextInput
-          multiline={true}
-          numberOfLines={3}
-          style={styles.multiline}
-          // value={text.name}
-          onChange={e => {
-            setName(e.value);
-          }}
-        />
-      </view> 
-      <view class="page-section-demo">
-        <radio-group name="radio-group">
-          <label><radio value="radio1" />十分重要</label>
-          <label><radio value="radio2" />一般重要</label>
-          <label><radio value="radio2" />不太重要</label>
-        </radio-group>
-      </view>
-       </form>
-    </Modal>
+        <button type={'submit'}  onClick={()=>add()}>添加</button>
+       
+      </Modal>
     </>
   );
 }
