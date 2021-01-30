@@ -35,5 +35,5 @@ export default function LineChart() {
     chart.render();
   });
 
-  return <view>{JSON.stringify(data, null, 4)}</view>;
+  return <view>4</view>;
 }
