@@ -1,0 +1,49 @@
+/* .root{
+      width: 750rpx;
+      paddingTop: 20rpx;
+    };
+.sticky{
+      position: sticky;
+      width: 750;
+      backgroundColor: #cccccc;
+    };
+.container{
+      padding: 20rpx;
+      borderStyle: solid;
+      borderColor: #dddddd;
+      borderWidth: 1rpx;
+      marginLeft: 20rpx;
+      marginRight: 20rpx;
+      marginBottom: 10rpx;
+    };
+    */
+.add-button{
+      margin: 7rpx;
+      padding: 5rpx;
+      alignItems: center;
+      backgroundColor: #df4242;
+      borderRadius: 3rpx;
+    }; 
+/* .box{
+      width: 64rpx;
+      height: 64rpx;
+    };
+.eventLogBox{
+      padding: 10rpx;
+      margin: 10rpx;
+      height: 80rpx;
+      borderWidth: 1rpx;
+      borderColor: #f0f0f0;
+      backgroundColor: #f9f9f9;
+    }; */
+/* .multiline{
+      borderWidth: 1rpx;
+      borderColor: #0f0f0f;
+      flex: 1;
+      fontSize: 26rpx;
+      height: 100rpx;
+      padding: 8rpx;
+      marginBottom: 8rpx;
+    }; */ 
+
+  
