@@ -9,8 +9,7 @@
     "eslint": "eslint --ext .js,.jsx,.tsx,.ts ./",
     "stylelint": "stylelint \"**/*.{css,scss,less}\"",
     "prettier": "prettier **/* --write",
-    "lint": "npm run eslint && npm run stylelint",
-    "rapper": "rapper --type redux --rapperPath \"src/rapper\" --apiUrl \"http://rap2api.taobao.org/repository/get?id=276879&token=WCPOMafC9zde2A_XvIMn8roR3_dxYnH5\" --rapUrl \"http://rap2.taobao.org\""
+    "lint": "npm run eslint && npm run stylelint"
   },
   "dependencies": {
     "rap": "^1.1.6",
