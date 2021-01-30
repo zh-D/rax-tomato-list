@@ -6,6 +6,7 @@ import Item from '../../components/Item';
 import Text from 'rax-text';
 import Modal from 'rax-modal';
 import TextInput from "rax-textinput";
+//import am-icon from "mini-ali-ui";
 import Image from 'rax-image';
 import {useAPI,fetch} from '../../rapper';
 //import styles from './index.module.css';
@@ -55,28 +56,38 @@ export default function () {
    const Data=[
     {
         "id":1,
-        "key":1,
-        "name":"11111"
+        "name":"11111",
+        "createDate":'2021/1/30',
+        "isFinish":false,
+        "priority":1,
     },
     {
         "id":2,
-        "key":2,
-        "name":"22222"
+        "name":"22222",
+        "createDate":'2021/1/30',
+        "isFinish":true,
+        "priority":1,
     },
     {
         "id":3,
-        "key":3,
-        "name":"33333"
+        "name":"33333",
+        "createDate":'2021/1/30',
+        "isFinish":false,
+        "priority":1,
     },
     {
         "id":4,
-        "key":4,
-        "name":"44444"
+        "name":"44444",
+        "createDate":'2021/1/30',
+        "isFinish":false,
+        "priority":1,
     },
     {
         "id":5,
-        "key":5,
-        "name":"55555"
+        "name":"55555",
+        "createDate":'2021/1/30',
+        "isFinish":true,
+        "priority":1,
     }
         ];
   const [userState, userDispatchers] = store.useModel('user');
@@ -88,13 +99,12 @@ export default function () {
   function add(){
     var d = new Date();
 		var str = '';
-		str += d.getFullYear() + '年'; //获取当前年份 
-		str += d.getMonth() + 1 + '月'; //获取当前月份（0——11） 
-		str += d.getDate() + '日';
+		str += d.getFullYear() + '/'; //获取当前年份 
+		str += d.getMonth() + 1 + '/'; //获取当前月份（0——11） 
+		str += d.getDate() + '/';
 				// str += d.getHours() + '时';
 				// str += d.getMinutes() + '分';
         // str += d.getSeconds() + '秒';
-   
     setCreateDate(str)
     console.log(createDate)
     var text={
@@ -111,6 +121,31 @@ export default function () {
     setVisible(false)
     setItemList(Data)
 
+  }
+  function done(id){
+    var temp=Data;
+    temp.forEach(item=>{
+      if (item.id===id){
+        item.isFinish=true;
+      }
+    })
+    console.log(temp)
+    setItemList(temp)
+    console.log(itemList)
+    //此处补充完成及重新请求的代码
+  }
+
+  function deleteItem(id){
+    console.log(id);
+    var temp=Data;
+    temp.forEach((item,index)=>{
+      if (item.id===id){
+       Data.splice(index,1)
+      }
+    })
+    setItemList(Data)
+    console.log(itemList)
+    //此处补充删除及重新请求的代码
   }
   return (
     <>
@@ -134,12 +169,30 @@ export default function () {
           width: '67rpx',
         }}
         /> */}
-      <ScrollView className="item-list">
+      <ScrollView 
+      style={{
+        height: '300rpx',
+      }}
+      >
       {itemList.map(item => {
         return (
-        <Item detail={item} />
+          <view>
+          {item.isFinish ? (
+            <Text className="item"
+              style={{textDecoration: 'line-through'}} 
+                >{item.name}</Text>
+            ) :( <Text className="item">{item.name}</Text>)}
+         
+          <button onClick={()=>done(item.id)} disabled={item.isFinish}>完成</button>
+          <button  onClick={()=>deleteItem(item.id)}>删除</button>
+          
+        
+          </view>
         )
-      })}
+          }
+      )
+        }
+      
     </ScrollView>
     <button type="button" onClick={()=>{ setVisible(true)}}>
       添加
@@ -186,7 +239,7 @@ export default function () {
           }}
         />
       </view>
-        <button onClick={()=>add()}>添加</button>
+        <button type={'submit'}  onClick={()=>add()}>添加</button>
        
     </Modal>
     </>
