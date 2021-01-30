@@ -9,9 +9,12 @@
     "eslint": "eslint --ext .js,.jsx,.tsx,.ts ./",
     "stylelint": "stylelint \"**/*.{css,scss,less}\"",
     "prettier": "prettier **/* --write",
-    "lint": "npm run eslint && npm run stylelint"
+    "lint": "npm run eslint && npm run stylelint",
+    "rapper": "rapper --type normal --rapperPath \"src/rapper\" --apiUrl \"http://rap2api.taobao.org/repository/get?id=276879&token=WCPOMafC9zde2A_XvIMn8roR3_dxYnH5\" --rapUrl \"http://rap2.taobao.org\""
   },
   "dependencies": {
+    "@antv/f2": "^3.8.1",
+    "f2react": "^1.0.7",
     "rap": "^1.1.6",
     "rax": "^1.1.0",
     "rax-document": "^0.1.0",
@@ -24,11 +27,12 @@
     "rax-view": "^2.0.0"
   },
   "devDependencies": {
-    "rax-app": "^3.0.0",
     "@iceworks/spec": "^1.0.0",
+    "@types/jquery": "^3.5.5",
     "@types/rax": "^1.0.0",
     "eslint": "^6.8.0",
     "prettier": "^2.1.2",
+    "rax-app": "^3.0.0",
     "stylelint": "^13.7.2"
   },
   "private": true,
