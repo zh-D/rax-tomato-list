@@ -81,14 +81,33 @@ export default function () {
         ];
   const [userState, userDispatchers] = store.useModel('user');
   const [visible, setVisible] = useState(false);
-  const[text,setText]=useState({});
-  //const[Data]=useAPI['GET/todo/getList']()
+  const [name,setName]=useState('')
+  const [priority,setPriority]=useState(null)
+  const [createDate,setCreateDate]=useState('')
   const [itemList, setItemList] = useState(Data);
-  function add(text){
+  function add(){
+    var d = new Date();
+		var str = '';
+		str += d.getFullYear() + '年'; //获取当前年份 
+		str += d.getMonth() + 1 + '月'; //获取当前月份（0——11） 
+		str += d.getDate() + '日';
+				// str += d.getHours() + '时';
+				// str += d.getMinutes() + '分';
+        // str += d.getSeconds() + '秒';
+   
+    setCreateDate(str)
+    console.log(createDate)
+    var text={
+      name,
+      priority,
+      createDate
+    }    
     console.log(text)
     Data.push(text);
     console.log(Data)
-    setText({});
+    setName('')
+    setPriority(null)
+    setCreateDate('')
     setVisible(false)
     setItemList(Data)
 
@@ -152,21 +171,7 @@ export default function () {
           style={styles.multiline}
           // value={text.name}
           onChange={e => {
-            setText({
-              name: e.value });
-              console.log(text)
-          }}
-        />
-      </view>
-      <view>
-      <label>时间：</label>
-      <TextInput
-          style={styles.multiline}
-          // value={this.state.text}
-          onChangeTime={time => {
-            setText({ 
-              time
-             });
+            setName(e.value);
           }}
         />
       </view>
@@ -175,12 +180,12 @@ export default function () {
       <TextInput
           style={styles.multiline}
           // value={this.state.text}
-          onChangePriority={priority => {
-            setText({ priority });
+          onChangePriority={e => {
+            setPriority(e.value);
           }}
         />
       </view>
-        <button onClick={()=>add(text)}>添加</button>
+        <button onClick={()=>add()}>添加</button>
        
     </Modal>
     </>
