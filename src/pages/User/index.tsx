@@ -171,7 +171,7 @@ export default function () {
         /> */}
       <ScrollView 
       style={{
-        height: '300rpx',
+        height: '200rpx',
       }}
       >
       {itemList.map(item => {
@@ -213,10 +213,10 @@ export default function () {
         top: '50rpx',
         width: '400rpx',
         left: '175rpx',
-        height:'200rpx'
+        height:'300rpx'
       }}
     >
-      <view>
+      {/* <view>
         <label>名称：</label>
       <TextInput
           multiline={true}
@@ -239,8 +239,28 @@ export default function () {
           }}
         />
       </view>
-        <button type={'submit'}  onClick={()=>add()}>添加</button>
-       
+        <button type={'submit'}  onClick={()=>add()}>添加</button> */}
+       <form onSubmit={add} >
+          <view>
+        <label>名称：</label>
+        <TextInput
+          multiline={true}
+          numberOfLines={3}
+          style={styles.multiline}
+          // value={text.name}
+          onChange={e => {
+            setName(e.value);
+          }}
+        />
+      </view> 
+      <view class="page-section-demo">
+        <radio-group name="radio-group">
+          <label><radio value="radio1" />十分重要</label>
+          <label><radio value="radio2" />一般重要</label>
+          <label><radio value="radio2" />不太重要</label>
+        </radio-group>
+      </view>
+       </form>
     </Modal>
     </>
   );
