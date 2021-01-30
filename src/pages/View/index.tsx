@@ -1,6 +1,11 @@
 import { createElement } from 'rax';
 import View from 'rax-view';
+import LineChart from '../../components/View/LineChart';
 
 export default function Login() {
-  return <View>我是可视化页</View>;
+  return (
+    <View>
+      <LineChart />
+    </View>
+  );
 }
