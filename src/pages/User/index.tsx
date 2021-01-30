@@ -180,7 +180,8 @@ export default function () {
       <TextInput
           style={styles.multiline}
           // value={this.state.text}
-          onChangePriority={e => {
+          onChange={e => {
+            console.log("e:",e)
             setPriority(e.value);
           }}
         />
