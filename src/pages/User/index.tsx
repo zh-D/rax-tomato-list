@@ -6,9 +6,10 @@ import Item from '../../components/Item';
 import Text from 'rax-text';
 import Modal from 'rax-modal';
 import TextInput from "rax-textinput";
+//import Am-icon from 'mini-ali-ui/es/am-icon/index';
 import Image from 'rax-image';
-import {useAPI,fetch} from '../../rapper';
-//import styles from './index.module.css';
+import { useAPI, fetch } from '../../rapper';
+import './index.module.css';
 
 
 const styles = {
@@ -52,46 +53,99 @@ const styles = {
 
 
 export default function () {
-   const Data=[
+  const Data = [
     {
-        "id":1,
-        "key":1,
-        "name":"11111"
+      "id": 1,
+      "name": "11111",
+      "createDate": '2021/1/30',
+      "isFinish": false,
+      "priority": 1,
     },
     {
-        "id":2,
-        "key":2,
-        "name":"22222"
+      "id": 2,
+      "name": "22222",
+      "createDate": '2021/1/30',
+      "isFinish": true,
+      "priority": 1,
     },
     {
-        "id":3,
-        "key":3,
-        "name":"33333"
+      "id": 3,
+      "name": "33333",
+      "createDate": '2021/1/30',
+      "isFinish": false,
+      "priority": 1,
     },
     {
-        "id":4,
-        "key":4,
-        "name":"44444"
+      "id": 4,
+      "name": "44444",
+      "createDate": '2021/1/30',
+      "isFinish": false,
+      "priority": 1,
     },
     {
-        "id":5,
-        "key":5,
-        "name":"55555"
+      "id": 5,
+      "name": "55555",
+      "createDate": '2021/1/30',
+      "isFinish": true,
+      "priority": 1,
     }
-        ];
+  ];
   const [userState, userDispatchers] = store.useModel('user');
   const [visible, setVisible] = useState(false);
-  const[text,setText]=useState({});
-  //const[Data]=useAPI['GET/todo/getList']()
+  const [name, setName] = useState('')
+  const [priority, setPriority] = useState('')
+  const [createDate, setCreateDate] = useState('')
   const [itemList, setItemList] = useState(Data);
-  function add(text){
+  function add() {
+    var d = new Date();
+    var str = '';
+    str += d.getFullYear() + '/'; //获取当前年份 
+    str += d.getMonth() + 1 + '/'; //获取当前月份（0——11） 
+    str += d.getDate() + '/';
+    // str += d.getHours() + '时';
+    // str += d.getMinutes() + '分';
+    // str += d.getSeconds() + '秒';
+    setCreateDate(str)
+    console.log(createDate)
+    var text = {
+      name,
+      priority,
+      createDate
+    }
     console.log(text)
     Data.push(text);
     console.log(Data)
-    setText({});
+    setName('')
+    setPriority('')
+    setCreateDate('')
     setVisible(false)
     setItemList(Data)
 
+  }
+  function done(id) {
+    var temp = Data;
+    temp.forEach(item => {
+      if (item.id === id) {
+        item.isFinish = true;
+      }
+    })
+    console.log(temp)
+    setItemList(temp)
+    console.log(itemList)
+    //此处补充完成及重新请求的代码
+  }
+
+  function deleteItem(id) {
+    console.log(id);
+    var temp = Data;
+    temp.forEach((item, index) => {
+      if (item.id === id) {
+        Data.splice(index, 1)
+      }
+    })
+    setItemList(Data)
+    console.log(itemList)
+    //此处补充删除及重新请求的代码
   }
   return (
     <>
@@ -115,36 +169,54 @@ export default function () {
           width: '67rpx',
         }}
         /> */}
-      <ScrollView className="item-list">
-      {itemList.map(item => {
-        return (
-        <Item detail={item} />
+      <ScrollView
+        style={{
+          height: '200rpx',
+        }}
+      >
+        {itemList.map(item => {
+          return (
+            <view>
+              {item.isFinish ? (
+                <Text className="item"
+                  style={{ textDecoration: 'line-through' }}
+                >{item.name}</Text>
+              ) : (<Text className="item">{item.name}</Text>)}
+
+              <button onClick={() => done(item.id)} disabled={item.isFinish} style={{"display":"inline-block"}}>完成</button>
+              <button onClick={() => deleteItem(item.id)} style={{"display":"inline-block"}}> 删除</button>
+
+
+            </view>
+          )
+        }
         )
-      })}
-    </ScrollView>
-    <button type="button" onClick={()=>{ setVisible(true)}}>
-      添加
+        }
+
+      </ScrollView>
+      <button className="add-button"  onClick={() => { setVisible(true) }}>
+        +添加
     </button>
-    <Modal
-      visible={visible}
-      onHide={() => {
-        console.log('hide');
-      }}
-      onShow={() => {
-        console.log('show');
-      }}
-      onMaskClick={() => {
-        setVisible(false);
-      }}
-      contentStyle={{
-        position: 'absolute',
-        top: '50rpx',
-        width: '400rpx',
-        left: '175rpx',
-        height:'200rpx'
-      }}
-    >
-      <view>
+      <Modal
+        visible={visible}
+        onHide={() => {
+          console.log('hide');
+        }}
+        onShow={() => {
+          console.log('show');
+        }}
+        onMaskClick={() => {
+          setVisible(false);
+        }}
+        contentStyle={{
+          position: 'absolute',
+          top: '50rpx',
+          width: '400rpx',
+          left: '175rpx',
+          height: '300rpx'
+        }}
+      >
+        <view>
         <label>名称：</label>
       <TextInput
           multiline={true}
@@ -152,21 +224,7 @@ export default function () {
           style={styles.multiline}
           // value={text.name}
           onChange={e => {
-            setText({
-              name: e.value });
-              console.log(text)
-          }}
-        />
-      </view>
-      <view>
-      <label>时间：</label>
-      <TextInput
-          style={styles.multiline}
-          // value={this.state.text}
-          onChangeTime={time => {
-            setText({ 
-              time
-             });
+            setName(e.value);
           }}
         />
       </view>
@@ -175,14 +233,15 @@ export default function () {
       <TextInput
           style={styles.multiline}
           // value={this.state.text}
-          onChangePriority={priority => {
-            setText({ priority });
+          onChange={e => {
+            console.log("e:",e)
+            setPriority(e.value);
           }}
         />
       </view>
-        <button onClick={()=>add(text)}>添加</button>
+        <button type={'submit'}  onClick={()=>add()}>添加</button>
        
-    </Modal>
+      </Modal>
     </>
   );
 }
