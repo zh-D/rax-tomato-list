@@ -1,10 +1,10 @@
 import { createElement } from 'rax';
 import View from 'rax-view';
 import Text from 'rax-text';
-import GroupHistograms from '../../components/View/GroupHistograms';
+import GroupHistograms from '../../components/view/GroupHistograms';
 import styles from './index.module.css';
-import EchartDate from '../../components/View/EchartDate';
-import HeatMap from '../../components/View/HeatMap';
+import EchartTest from '../../components/view/EchartTest';
+import HeatMap from '../../components/view/HeatMap';
 
 export default function Login() {
   return (
@@ -19,7 +19,7 @@ export default function Login() {
       </View>
       <View style={{ textAlign: 'center', marginTop: 100 }}>
         <Text>月管理</Text>
-        <EchartDate />
+        <EchartTest />
       </View>
     </View>
   );

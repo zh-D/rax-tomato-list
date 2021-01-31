@@ -82,10 +82,18 @@ for (let i = 0; i < data.length; i++) {
 console.log(source);
 
 export default class HeatMap extends Component {
+  state={
+    date:new Date(),//当前Date
+    day:new Date().getDay(),//今天星期几0-6
+    thisWeekBegin:new Date(new Date().getTime()-(new Date().getDay()*(1000*60*60*24))),//这周第一天的Date对象 星期日
+    thisWeekEnd:new Date(new Date().getTime()-((-6+new Date().getDay())*(1000*60*60*24)))//这周最后一天的Date对象
+  }
   constructor(props) {
     super(props);
     //@ts-ignore
     this.raxCanvasDemo = createRef();
+    this.lastWeek=this.lastWeek.bind(this);
+    this.nextWeek=this.nextWeek.bind(this)
   }
   componentDidMount() {
     //@ts-ignore
@@ -137,8 +145,53 @@ export default class HeatMap extends Component {
     // context.fillRect(0, 0, 100, 100);
   }
 
+  lastWeek(){
+    
+    var lastWeekBeginTemp=this.state.thisWeekBegin.getTime()-(6*(1000*60*60*24));
+    var lastWeekEndTemp=this.state.thisWeekEnd.getTime()-(6*(1000*60*60*24));
+    var lastWeekBegin=new Date();
+    lastWeekBegin.setTime(lastWeekBeginTemp);
+    var lastWeekEnd=new Date();
+    lastWeekEnd.setTime(lastWeekEndTemp);
+    this.setState({
+      thisWeekBegin:lastWeekBegin,
+      thisWeekEnd:lastWeekEnd,
+    },()=>{
+      console.log('上周一是',this.state.thisWeekBegin.toLocaleDateString())
+      console.log('上周末是',this.state.thisWeekEnd.toLocaleDateString())
+      //请求写在这里
+    })
+
+    
+
+  }
+
+  nextWeek(){
+    console.log(this.state.date.getDay())
+    console.log(this.state.thisWeekBegin)
+    console.log(this.state.thisWeekEnd)
+    var nextWeekBeginTemp=this.state.thisWeekBegin.getTime()+(7*(1000*60*60*24));
+    var nextWeekEndTemp=this.state.thisWeekEnd.getTime()+(7*(1000*60*60*24));
+    var nextWeekBegin=new Date();
+    nextWeekBegin.setTime(nextWeekBeginTemp);
+    var nextWeekEnd=new Date();
+    nextWeekEnd.setTime(nextWeekEndTemp);
+    this.setState({
+      thisWeekBegin:nextWeekBegin,
+      thisWeekEnd:nextWeekEnd,
+    },()=>{
+      console.log('下周日是',this.state.thisWeekBegin.toLocaleDateString())
+      console.log('下周六是',this.state.thisWeekEnd.toLocaleDateString())
+      //请求写在这里
+    })
+
+  }
+
   render() {
     return (
+      <>
+      <button onClick={this.lastWeek}>前一周</button>
+      <button onClick={this.nextWeek}>后一周</button>
       <Canvas
         catchtouchstart="touchStart"
         catchtouchend="touchEnd"
@@ -150,6 +203,7 @@ export default class HeatMap extends Component {
         ref={this.raxCanvasDemo}
         id="canv2"
       />
+      </>
     );
   }
 }
