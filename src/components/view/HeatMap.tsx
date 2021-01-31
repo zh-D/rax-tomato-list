@@ -144,7 +144,7 @@ export default class HeatMap extends Component {
         catchtouchend="touchEnd"
         style={{
           width: 750,
-          height: 250,
+          height: 375,
         }}
         //@ts-ignore
         ref={this.raxCanvasDemo}

@@ -2,6 +2,7 @@ import { createElement, Component, render, createRef } from 'rax';
 import Canvas from 'rax-canvas';
 import DriverUniversal from 'driver-universal';
 import request from 'universal-request';
+import view from 'rax-view';
 let echarts = require('echarts');
 
 // const dateList = [
@@ -76,7 +77,7 @@ function Maxdays(year, month) {
   return dayCount;
 }
 
-class EchartTest extends Component {
+class EchratDate extends Component {
   state = {
     today: date.toLocaleDateString(),
     currentMonth: date.getMonth() + 1,
@@ -529,23 +530,39 @@ class EchartTest extends Component {
       //     ref={this.raxCanvasDemo}
       //     id="main"
       //   />
-      <>
-        <button onClick={this.lastMonth}>上月</button>
-        <button onClick={this.nextMonth}>下月</button>
-        <div
+      <view
+        style={{
+          height: 950,
+          width: 750,
+          position: 'relative',
+        }}
+      >
+        <view
           style={{
             width: 750,
-            height: 350,
+            height: 750,
+            marginTop: 20,
+            // position: 'relative',
           }}
           //@ts-ignore
           ref={this.raxCanvasDemo}
           id="main"
-        />
-      </>
+        ></view>
+        <view
+          style={{
+            position: 'absolute',
+            top: 630,
+            transform: 'translateX(-50%)',
+          }}
+        >
+          <button onClick={this.lastMonth}>上月</button>
+          <button onClick={this.nextMonth}>下月</button>
+        </view>
+      </view>
     );
   }
 }
 
 // //@ts-ignore
 // render(<CanvasSample />, document.body, { driver: DriverUniversal })
-export { EchartTest as default };
+export { EchratDate as default };

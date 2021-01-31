@@ -1,0 +1,17 @@
+.container {
+  height: "950rpx";
+  width: 750;
+  position: relative;
+}
+
+.buttonContainer {
+  position: absolute;
+  top: 600;
+  transform: translateX(-50%);
+}
+
+.canv {
+  width: 750;
+  height: 750;
+  margin-top: 20;
+}

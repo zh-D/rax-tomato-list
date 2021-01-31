@@ -160,7 +160,7 @@ export default class GroupHistograms extends Component {
       <Canvas
         style={{
           width: 750,
-          height: 250,
+          height: 375,
         }}
         //@ts-ignore
         ref={this.raxCanvasDemo}
