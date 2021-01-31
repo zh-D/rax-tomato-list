@@ -15,6 +15,14 @@
     {
       "path": "/view",
       "source": "pages/View/index"
+    },
+    {
+      "path": "/forget",
+      "source": "pages/Forget-password/index"
+    },
+    {
+      "path": "/regist",
+      "source": "pages/Regist/index"
     }
   ],
   "tabBar": {
