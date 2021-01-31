@@ -91,7 +91,7 @@ function Maxdays(year,month){
     return dayCount;
 }
 
-class CanvasSample extends Component  {
+class EchartTest extends Component  {
     state={
         today:date.toLocaleDateString(),
         currentMonth:date.getMonth()+1,
@@ -351,7 +351,9 @@ class CanvasSample extends Component  {
             left: 'center',//calendar组件离容器左侧的距离
             top: 'middle',//calendar组件离容器上侧的距离。
             cellSize:'auto',//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
-            yearLabel: {show: true},
+            yearLabel: {
+                show: true,
+            },
             orient: 'vertical',
             dayLabel: {
                 firstDay: 1,
@@ -540,23 +542,19 @@ nextMonth(){
 
   render() {
     return (
-        // 为Echarts准备一个具备大小的Dom
-    //     <Canvas
-    //     style={{
-    //       width: 350,
-    //       height: 350,
-    //     }}
-    //     //@ts-ignore
-    //     ref={this.raxCanvasDemo}
-    //     id="main"
-    //   />
-    <>
+        <>
+    
     <button onClick={this.lastMonth}>上月</button>
     <button onClick={this.nextMonth}>下月</button>
+    <span>
+       {this.state.currentYear}年{this.state.currentMonth}月
+    </span>
     <div
     style={{
-      width: 500,
+      width: 578,
       height: 100,
+      left:50,
+      top:50    
     }}
     //@ts-ignore
     ref={this.raxCanvasDemo}
@@ -571,4 +569,4 @@ nextMonth(){
 
 // //@ts-ignore
 // render(<CanvasSample />, document.body, { driver: DriverUniversal })
-export { CanvasSample as default };
+export { EchartTest as default };
