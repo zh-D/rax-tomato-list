@@ -540,13 +540,9 @@ class EchratDate extends Component {
         <view
           style={{
             width: 750,
-<<<<<<< HEAD
             height: 750,
             marginTop: 20,
             // position: 'relative',
-=======
-            height: 550,
->>>>>>> 053097cf41831854ed9af5c4afd6c6be88e92681
           }}
           //@ts-ignore
           ref={this.raxCanvasDemo}
