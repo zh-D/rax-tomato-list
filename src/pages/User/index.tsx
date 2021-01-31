@@ -1,56 +1,9 @@
 import { createElement, useState, useEffect } from 'rax';
 import store from '@/store';
-import { createStore, history } from 'rax-app';
-import ScrollView from 'rax-scrollview';
-import Item from '../../components/Item';
-import Text from 'rax-text';
-import Modal from 'rax-modal';
-import TextInput from "rax-textinput";
-//import Am-icon from 'mini-ali-ui/es/am-icon/index';
-import Image from 'rax-image';
-import { useAPI, fetch } from '../../rapper';
-import './index.module.css';
-
-
-const styles = {
-  root: {
-    width: '750rpx',
-    paddingTop: '20rpx'
-  },
-  container: {
-    padding: '20rpx',
-    borderStyle: "solid",
-    borderColor: "#dddddd",
-    borderWidth: '1rpx',
-    marginLeft: '20rpx',
-    marginRight: '20rpx',
-    marginBottom: '10rpx'
-  },
-  default: {
-    borderWidth: '1rpx',
-    borderColor: "#0f0f0f",
-    flex: 1
-  },
-  eventLabel: {
-    margin: '3rpx',
-    fontSize: '24rpx'
-  },
-  multiline: {
-    borderWidth: '1rpx',
-    borderColor: "#0f0f0f",
-    flex: 1,
-    fontSize: '26rpx',
-    height: '100rpx',
-    padding: '8rpx',
-    marginBottom: '8rpx'
-  },
-  hashtag: {
-    color: "blue",
-    margin: '10rpx',
-    fontWeight: "bold"
-  }
-};
-
+import View from 'rax-view'
+import { history } from 'rax-app';
+import userImage from '../../components/image/login-image.jpg'
+import tomato from '../../components/image/tomato.png'
 
 export default function () {
   const Data = [
@@ -148,101 +101,36 @@ export default function () {
     //此处补充删除及重新请求的代码
   }
   return (
-    <>
-      我是用户页
-      <button
-        onClick={() => {
-          userDispatchers.update(userState.isLogin);
-          history.push('/');
-        }}
-      >
-        登出
-      </button>
-      {/* <Image  
-        mode="aspectFit"
-        className="head-img"
-        source={{
-          uri:'../../picture/head.jpg'
-        }}
-        style={{
-          height: '68rpx',
-          width: '67rpx',
-        }}
-        /> */}
-      <ScrollView
-        style={{
-          height: '200rpx',
-        }}
-      >
-        {itemList.map(item => {
-          return (
-            <view>
-              {item.isFinish ? (
-                <Text className="item"
-                  style={{ textDecoration: 'line-through' }}
-                >{item.name}</Text>
-              ) : (<Text className="item">{item.name}</Text>)}
 
-              <button onClick={() => done(item.id)} disabled={item.isFinish} style={{"display":"inline-block"}}>完成</button>
-              <button onClick={() => deleteItem(item.id)} style={{"display":"inline-block"}}> 删除</button>
-
-
-            </view>
-          )
-        }
-        )
-        }
-
-      </ScrollView>
-      <button className="add-button"  onClick={() => { setVisible(true) }}>
-        +添加
-    </button>
-      <Modal
-        visible={visible}
-        onHide={() => {
-          console.log('hide');
-        }}
-        onShow={() => {
-          console.log('show');
-        }}
-        onMaskClick={() => {
-          setVisible(false);
-        }}
-        contentStyle={{
-          position: 'absolute',
-          top: '50rpx',
-          width: '400rpx',
-          left: '175rpx',
-          height: '300rpx'
-        }}
-      >
-        <view>
-        <label>名称：</label>
-      <TextInput
-          multiline={true}
-          numberOfLines={3}
-          style={styles.multiline}
-          // value={text.name}
-          onChange={e => {
-            setName(e.value);
-          }}
-        />
-      </view>
-      <view>
-        <label>优先级</label>
-      <TextInput
-          style={styles.multiline}
-          // value={this.state.text}
-          onChange={e => {
-            console.log("e:",e)
-            setPriority(e.value);
-          }}
-        />
-      </view>
-        <button type={'submit'}  onClick={()=>add()}>添加</button>
-       
-      </Modal>
-    </>
+      <View style={{height: '500rpx'}}>
+          <div style={{textAlign:'center',height:'80px'}}>
+            <img src={userImage} />
+          </div>
+          <div  style={{marginTop:'35%'}} >
+            <button
+            type='submit'
+              style={{
+                width: '90%',
+                margin: '50rpx 5%',
+                padding: '5px',
+                border: '1px solid white',
+                borderRadius: '5px',
+                backgroundColor: '#f15858',
+                color: 'white',
+                fontSize: '15px',
+              }}
+              onClick={() => {
+                userDispatchers.update(userState.isLogin);
+                history.push('/');
+              }}
+            >
+          登 出
+        </button>
+        </div>
+        <div style={{marginTop:'20rpx'}} >
+          <img src={tomato} alt="tomato"/>
+        </div>
+      </View>
   );
 }
 
