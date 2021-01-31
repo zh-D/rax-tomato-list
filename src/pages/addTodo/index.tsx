@@ -9,7 +9,6 @@ import  './index.css'
 
 
 export default function AddTodo() {
-
   return (
     <View >
       <div style={{width: '100%',height: '5%',backgroundColor:'#f9f6f6'}} >
@@ -26,16 +25,21 @@ export default function AddTodo() {
         <img src={addImage} alt="add" height={50} />
       </div>
       <view class="page-add-todo">
-
         <view class="add-todo">
           <input 
             class="add-todo-input"
             placeholder="此处添加需要做的事项?"
+            onChange={
+              (e)=>console.log(e.target.value)//输入的内容
+              //添加事件请求
+
+            }
           />
         </view>
 
         <view class="todo-footer">
-          <button style={{width: '90%',
+          <button 
+          style={{width: '90%',
               margin: '50rpx 5%',
               padding: '5px',
               border: '1px solid white',

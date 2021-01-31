@@ -84,8 +84,10 @@
 }
 
 .deleteButton {
-  display: none;
-}
-.deleteButton :hover {
   display: block;
+  float: right;
+  margin-right: 20rpx;
+  border: none;
+  line-height: 80rpx;
+  height: 60rpx;
 }

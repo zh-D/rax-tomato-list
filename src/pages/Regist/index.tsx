@@ -1,4 +1,4 @@
-import { createElement } from 'rax';
+import { createElement , useState } from 'rax';
 import View from 'rax-view';
 // import Text from 'rax-text';
 // import store from '@/store';
@@ -31,7 +31,10 @@ const styles = {
 
 export default function Regist() {
   // const [userState, userDispatchers] = store.useModel('user');
-
+ const [tel, settel] = useState('')
+ const [password1, setpassword1] = useState('')
+ const [password2, setpassword2] = useState('')
+// const [confirm, setconfirm] = useState('')
   return (
     <View style={{heightL: '500px'}}>
         <div style={{width: '100%',height: '5%',backgroundColor:'#f9f6f6'}} >
@@ -51,24 +54,45 @@ export default function Regist() {
         <TextInput
           style={styles.Input}
           placeholder='手机号/邮箱'
+          onChange={
+            (e)=>settel(e.target.value)
+          }
         />
         <TextInput
           style={styles.Input}
           placeholder='密码'
           password={true}
+          onChange={
+            (e)=>setpassword1(e.target.value)
+          }
         />
         <TextInput
           style={styles.Input}
-          placeholder='再次确认密码'
+          placeholder='确认密码'
           password={true}
+          onChange={
+            (e)=>setpassword2(e.target.value)
+          }
         />
       <br />
       <button
       type='submit'
         style={styles.Button}
+        // onChange={()=>{console.log(tel,password1,password2,confirm)}}
         onClick={() => {
-          alert('注册成功！')
-          history.push('/login');
+          if(password1==password2){
+            alert('注册成功！')
+            history.push('/login');
+            //进行注册网络请求
+            console.log(tel,password1,password2)
+          }else {
+            setpassword1('')
+            setpassword2('')
+            alert('密码不一致，请重新输入！')
+            console.log(tel,password1,password2)
+            
+          }
+           console.log(tel,password1,password2)
         }}
       >
         注 册

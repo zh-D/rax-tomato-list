@@ -10,6 +10,7 @@ import bellImage from '../../components/image/bell.svg'
 import addImage from '../../components/image/add.svg'
 import loginImage from '../../components/image/login-image.jpg'
 import tomato from '../../components/image/tomato.png'
+import deleteIcon from '../../components/image/delete.svg'
 import './index.css';
 
 
@@ -81,8 +82,13 @@ export default function Home() {
             return todo
           }
       });
-      console.log(e,e.target.value,e.target.checked,Data,D)
+      // console.log(e,e.target.value,e.target.checked,Data,D)
       setdata(D)
+    }
+    const deleteTodo=(e)=>{
+      console.log(e.target.id)//事件id
+      //请求
+      
     }
     return (
       <View className="todo-items">
@@ -99,6 +105,13 @@ export default function Home() {
                 <text  className="todo-item-text">
                   {detail.name}
                 </text>
+                <img 
+                  id={detail.id}
+                  src={deleteIcon} 
+                  alt="delete" 
+                  className="deleteButton" 
+                  onClick={deleteTodo}
+                />
               </label>
             </div>
           ):(
@@ -113,6 +126,13 @@ export default function Home() {
                 <text  className="todo-item-text">
                   {detail.name}
                 </text>
+                <img 
+                  id={detail.id}
+                  src={deleteIcon} 
+                  alt="delete"  
+                  className="deleteButton" 
+                  onClick={deleteTodo}
+                />
               </label>
             </View>
           )
