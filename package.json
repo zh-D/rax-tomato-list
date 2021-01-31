@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@antv/f2": "^3.8.1",
-    "f2react": "^1.0.7",
     "rap": "^1.1.6",
     "rax": "^1.1.0",
+    "rax-canvas": "^2.2.2",
     "rax-document": "^0.1.0",
     "rax-image": "^2.2.5",
     "rax-link": "^1.0.1",
