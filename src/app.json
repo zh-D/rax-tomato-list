@@ -33,21 +33,21 @@
       {
         "name": "view",
         "path": "/view",
-        "icon": "./components/image/view.svg",
-        "activeIcon": "./components/image/view_active.svg"
+        "icon": "../src/components/image/view.svg",
+        "activeIcon": "../src/components/image/view_active.svg"
       },
       {
         "name": "home",
         "path": "/",
-        "icon": "./components/image/home.svg",
-        "activeIcon": "./components/image/home_active.svg"
+        "icon": "../src/components/image/home.svg",
+        "activeIcon": "../src/components/image/home_active.svg"
       },
 
       {
         "name": "user",
         "path": "/user",
-        "icon": "./components/image/user_tab.svg",
-        "activeIcon": "./components/image/user_active.svg"
+        "icon": "../src/components/image/user_tab.svg",
+        "activeIcon": "../src/components/image/user_active.svg"
       }
     ]
   },
