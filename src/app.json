@@ -23,6 +23,10 @@
     {
       "path": "/regist",
       "source": "pages/Regist/index"
+    },
+    {
+      "path": "/add",
+      "source": "pages/addTodo/index"
     }
   ],
   "tabBar": {
@@ -33,21 +37,21 @@
       {
         "name": "view",
         "path": "/view",
-        "icon": "https://gw.alicdn.com/tfs/TB1ypSMTcfpK1RjSZFOXXa6nFXa-144-144.png",
-        "activeIcon": "https://gw.alicdn.com/tfs/TB1NBiCTgHqK1RjSZFPXXcwapXa-144-144.png"
+        "icon": "../src/components/image/view.svg",
+        "activeIcon": "../src/components/image/view_active.svg"
       },
       {
         "name": "home",
         "path": "/",
-        "icon": "https://gw.alicdn.com/tfs/TB1ypSMTcfpK1RjSZFOXXa6nFXa-144-144.png",
-        "activeIcon": "https://gw.alicdn.com/tfs/TB1NBiCTgHqK1RjSZFPXXcwapXa-144-144.png"
+        "icon": "../src/components/image/home.svg",
+        "activeIcon": "../src/components/image/home_active.svg"
       },
 
       {
         "name": "user",
         "path": "/user",
-        "icon": "https://gw.alicdn.com/tfs/TB1ypSMTcfpK1RjSZFOXXa6nFXa-144-144.png",
-        "activeIcon": "https://gw.alicdn.com/tfs/TB1NBiCTgHqK1RjSZFPXXcwapXa-144-144.png"
+        "icon": "../src/components/image/user_tab.svg",
+        "activeIcon": "../src/components/image/user_active.svg"
       }
     ]
   },

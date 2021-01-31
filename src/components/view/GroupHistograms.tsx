@@ -6,6 +6,7 @@ import DriverUniversal from 'driver-universal';
 import F2 from '@antv/f2';
 import request from 'universal-request';
 import view from 'rax-view';
+import request from 'universal-request';
 
 interface Data {
   date: string;
@@ -97,6 +98,7 @@ const data = [
 ];
 
 let yesterday;
+let today;
 let tomorrow;
 
 export default class GroupHistograms extends Component {
