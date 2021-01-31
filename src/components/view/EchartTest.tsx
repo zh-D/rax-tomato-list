@@ -544,7 +544,7 @@ nextMonth(){
     <div
     style={{
       width: 750,
-      height: 250,
+      height: 350,
     }}
     //@ts-ignore
     ref={this.raxCanvasDemo}
