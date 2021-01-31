@@ -93,14 +93,19 @@ const data = [
 ];
 
 export default class GroupHistograms extends Component {
+  state={
+    date:new Date(),//当前日期Date对象
+    today:new Date().getDate(),//当前日期 如2021/1/31
+    data:[],
+  }
   constructor(props) {
     super(props);
     //@ts-ignore
     this.raxCanvasDemo = createRef();
     //@ts-ignore
-    this.state = {
-      data: [],
-    };
+    this.tomorrow=this.tomorrow.bind(this);
+    this.yesterday=this.yesterday.bind(this);
+    
   }
 
   componentDidMount() {
@@ -154,9 +159,40 @@ export default class GroupHistograms extends Component {
     });
     chart.render();
   }
+  yesterday(){
+    var temp=this.state.date.getTime()-(1*(1000*60*60*24))
+    var yester=new Date();
+    yester.setTime(temp);
+    this.setState({
+      today:yester.toLocaleDateString(),
+      date:yester,
+    },()=>{
+      console.log("昨天是：",this.state.today)
+      //请求在这里进行
+      //如果需要重新画图也在这里画
+    })
+
+  }
+  tomorrow(){
+    var temp=this.state.date.getTime()+(1*(1000*60*60*24))
+    var yester=new Date();
+    yester.setTime(temp);
+    this.setState({
+      today:yester.toLocaleDateString(),
+      date:yester,
+    },()=>{
+      console.log("明天是：",this.state.today)
+      //请求在这里进行
+      //如果需要重新画图也在这里画
+    })
+
+  }
 
   render() {
     return (
+      <>
+      <button onClick={this.yesterday}>前一天</button>
+      <button onClick={this.tomorrow}>后一天</button>
       <Canvas
         style={{
           width: 750,
@@ -166,6 +202,7 @@ export default class GroupHistograms extends Component {
         ref={this.raxCanvasDemo}
         id="canv1"
       />
+      </>
     );
   }
 }
