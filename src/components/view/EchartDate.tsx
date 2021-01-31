@@ -324,13 +324,13 @@ class EchratDate extends Component {
       <view
         style={{
           height: 950,
-          width: 750,
+          width: 720,
           position: 'relative',
         }}
       >
         <view
           style={{
-            width: 750,
+            width: 720,
             height: 700,
             marginTop: 20,
           }}
