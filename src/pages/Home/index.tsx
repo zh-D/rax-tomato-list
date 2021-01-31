@@ -1,62 +1,116 @@
-import { createElement, useEffect, useState } from 'rax';
+import { createElement, useEffect, useState, useRef } from 'rax';
 import View from 'rax-view';
-import Text from 'rax-text';
+// import Text from 'rax-text';
 import store from '@/store';
 import { history } from 'rax-app';
+import homeImage from '../../components/image/home_background.png'
+import menuImage from '../../components/image/home_menu.svg'
+import bellImage from '../../components/image/bell.svg'
+import addImage from '../../components/image/add.svg'
+import './index.css';
 
-import styles from './index.module.css';
 
 
-const Data = [
-  {
-    "id": 1,
-    "name": "event1",
-    "isFinish": false,
-  },
-  {
-    "id": 2,
-    "name": "event2",
-    "isFinish": false,
-  },
-  {
-    "id": 3,
-    "name": "event3",
-    "isFinish": true,
-  },
-  {
-    "id": 4,
-    "name": "event4",
-    "isFinish": false,
-  },
-]
 
-function Item({detail}){
-  return (
-    <View>
-      {
-        detail.isFinish? (
-          <Text   style={{textDecoration:'line-through'}}  >
-            {detail.name}
-          </Text>
-        ):(
-          <p  style={{fontWeight: 'bold'}} >
-                {detail.name}
-          </p>
-        )
-      }
-    </View>
-  )
-}
+
+
+
+
 
 export default function Home() {
   const [userState, userDispatchers] = store.useModel('user');
   useEffect(() => {
     // 在这里检查登录状态
   }, []);
+  const Data = [
+    {
+      "id": 1,
+      "name": "event1",
+      "isFinish": false,
+    },
+    {
+      "id": 2,
+      "name": "event2",
+      "isFinish": false,
+    },
+    {
+      "id": 3,
+      "name": "event3",
+      "isFinish": true,
+    },
+    {
+      "id": 4,
+      "name": "event4",
+      "isFinish": false,
+    },
+  ]
+  const [data, setdata] = useState(Data)
+  const dataRef = useRef(data)
+  dataRef.current=data
+
+  function Item({detail}){
+    const onTodoChange=(e) => {
+      let D=data.map(todo => {
+          if(todo.name ===e.target.value){
+            return {
+              ...todo,
+              isFinish:e.target.checked
+            }
+          }else {
+            return todo
+          }
+      });
+      console.log(e,e.target.value,e.target.checked,Data,D)
+      setdata(D)
+    }
+    return (
+      <View className="todo-items">
+        {
+          detail.isFinish? (
+            <div className="todo-items-group"  onChange={onTodoChange} >
+              <label  className="todo-item checked"  >
+                <input 
+                  type="checkbox" 
+                  className="todo-item-checkbox"
+                  value={detail.name}
+                  checked={detail.isFinish}
+                />
+                <text  className="todo-item-text">
+                  {detail.name}
+                </text>
+              </label>
+            </div>
+          ):(
+            <View className="todo-items-group"  onChange={onTodoChange}    >
+              <label  className="todo-item"  >
+                <input 
+                  type="checkbox" 
+                  className="todo-item-checkbox"
+                  value={detail.name}
+                  checked={detail.isFinish}
+                />
+                <text  className="todo-item-text">
+                  {detail.name}
+                </text>
+              </label>
+            </View>
+          )
+        }
+      </View>
+    )
+  }
+
   return (
     <View>
       {userState.isLogin ? (
         <View>
+          <View>
+            <div style={{backgroundColor:'rgb(255 248 248)'}} >
+              <img src={menuImage} height={30} style={{margin:'5rpx 0 0 10rpx'}} />
+              <img src={bellImage} height={30} style={{margin:'5rpx 10rpx 0 0',float: 'right'}}  />
+            </div>
+            <img src={homeImage} />
+          </View>
           {/* {Data.map(e => {
             return e.isFinish?
                (<div>
@@ -72,12 +126,15 @@ export default function Home() {
             )
           })} */}
           {
-            Data.map(e=> {
+            data.map(e=> {
               return (
                 <Item detail={e} key={e.id} />
               )
             })
           }
+          <View>
+            <img src={addImage} height={40} style={{position: 'fixed',bottom:'10%',right:'5%'}} />
+          </View>
         </View>
         
       ) : (

@@ -33,21 +33,21 @@
       {
         "name": "view",
         "path": "/view",
-        "icon": "https://gw.alicdn.com/tfs/TB1ypSMTcfpK1RjSZFOXXa6nFXa-144-144.png",
-        "activeIcon": "https://gw.alicdn.com/tfs/TB1NBiCTgHqK1RjSZFPXXcwapXa-144-144.png"
+        "icon": "./components/image/view.svg",
+        "activeIcon": "./components/image/view_active.svg"
       },
       {
         "name": "home",
         "path": "/",
-        "icon": "https://gw.alicdn.com/tfs/TB1ypSMTcfpK1RjSZFOXXa6nFXa-144-144.png",
-        "activeIcon": "https://gw.alicdn.com/tfs/TB1NBiCTgHqK1RjSZFPXXcwapXa-144-144.png"
+        "icon": "./components/image/home.svg",
+        "activeIcon": "./components/image/home_active.svg"
       },
 
       {
         "name": "user",
         "path": "/user",
-        "icon": "https://gw.alicdn.com/tfs/TB1ypSMTcfpK1RjSZFOXXa6nFXa-144-144.png",
-        "activeIcon": "https://gw.alicdn.com/tfs/TB1NBiCTgHqK1RjSZFPXXcwapXa-144-144.png"
+        "icon": "./components/image/user_tab.svg",
+        "activeIcon": "./components/image/user_active.svg"
       }
     ]
   },

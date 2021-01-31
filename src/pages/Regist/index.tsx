@@ -67,6 +67,7 @@ export default function Regist() {
       type='submit'
         style={styles.Button}
         onClick={() => {
+          alert('注册成功！')
           history.push('/login');
         }}
       >
