@@ -1,423 +1,155 @@
 import { createElement, Component, render, createRef } from 'rax';
 import Canvas from 'rax-canvas';
-import DriverUniversal from "driver-universal"
-//import echarts from '../../../node_modules/echarts'
+import DriverUniversal from "driver-universal";
+import request from 'universal-request';
 let echarts = require('echarts');
 
-const dateList = [
-    ['2017-1-1', '初四'],
-    ['2017-1-2', '初五'],
-    ['2017-1-3', '初六'],
-    ['2017-1-4', '初七'],
-    ['2017-1-5', '初八', '小寒'],
-    ['2017-1-6', '初九'],
-    ['2017-1-7', '初十'],
-    ['2017-1-8', '十一'],
-    ['2017-1-9', '十二'],
-    ['2017-1-10', '十三'],
-    ['2017-1-11', '十四'],
-    ['2017-1-12', '十五'],
-    ['2017-1-13', '十六'],
-    ['2017-1-14', '十七'],
-    ['2017-1-15', '十八'],
-    ['2017-1-16', '十九'],
-    ['2017-1-17', '二十'],
-    ['2017-1-18', '廿一'],
-    ['2017-1-19', '廿二'],
-    ['2017-1-20', '廿三', '大寒'],
-    ['2017-1-21', '廿四'],
-    ['2017-1-22', '廿五'],
-    ['2017-1-23', '廿六'],
-    ['2017-1-24', '廿七'],
-    ['2017-1-25', '廿八'],
-    ['2017-1-26', '廿九'],
-    ['2017-1-27', '三十'],
-    ['2017-1-28', '正月'],
-    ['2017-1-29', '初二'],
-    ['2017-1-30', '初三'],
-    ['2017-1-31', '初四'],
-    ['2017-2-1', '初五'],
-    ['2017-2-2', '初六'],
-    ['2017-2-3', '初七', '立春'],
-    ['2017-2-4', '初八'],
-    ['2017-2-5', '初九'],
-    ['2017-2-6', '初十'],
-    ['2017-2-7', '十一'],
-    ['2017-2-8', '十二'],
-    ['2017-2-9', '十三'],
-    ['2017-2-10', '十四'],
-    ['2017-2-11', '十五'],
-    ['2017-2-12', '十六'],
-    ['2017-2-13', '十七'],
-    ['2017-2-14', '十八'],
-    ['2017-2-15', '十九'],
-    ['2017-2-16', '二十'],
-    ['2017-2-17', '廿一'],
-    ['2017-2-18', '廿二', '雨水'],
-    ['2017-2-19', '廿三'],
-    ['2017-2-20', '廿四'],
-    ['2017-2-21', '廿五'],
-    ['2017-2-22', '廿六'],
-    ['2017-2-23', '廿七'],
-    ['2017-2-24', '廿八'],
-    ['2017-2-25', '廿九'],
-    ['2017-2-26', '二月'],
-    ['2017-2-27', '初二'],
-    ['2017-2-28', '初三'],
-    ['2017-3-1', '初四'],
-    ['2017-3-2', '初五'],
-    ['2017-3-3', '初六'],
-    ['2017-3-4', '初七'],
-    ['2017-3-5', '初八', '驚蟄'],
-    ['2017-3-6', '初九'],
-    ['2017-3-7', '初十'],
-    ['2017-3-8', '十一'],
-    ['2017-3-9', '十二'],
-    ['2017-3-10', '十三'],
-    ['2017-3-11', '十四'],
-    ['2017-3-12', '十五'],
-    ['2017-3-13', '十六'],
-    ['2017-3-14', '十七'],
-    ['2017-3-15', '十八'],
-    ['2017-3-16', '十九'],
-    ['2017-3-17', '二十'],
-    ['2017-3-18', '廿一'],
-    ['2017-3-19', '廿二'],
-    ['2017-3-20', '廿三', '春分'],
-    ['2017-3-21', '廿四'],
-    ['2017-3-22', '廿五'],
-    ['2017-3-23', '廿六'],
-    ['2017-3-24', '廿七'],
-    ['2017-3-25', '廿八'],
-    ['2017-3-26', '廿九'],
-    ['2017-3-27', '三十'],
-    ['2017-3-28', '三月'],
-    ['2017-3-29', '初二'],
-    ['2017-3-30', '初三'],
-    ['2017-3-31', '初四'],
-    ['2017-4-1', '初五'],
-    ['2017-4-2', '初六'],
-    ['2017-4-3', '初七'],
-    ['2017-4-4', '初八', '清明'],
-    ['2017-4-5', '初九'],
-    ['2017-4-6', '初十'],
-    ['2017-4-7', '十一'],
-    ['2017-4-8', '十二'],
-    ['2017-4-9', '十三'],
-    ['2017-4-10', '十四'],
-    ['2017-4-11', '十五'],
-    ['2017-4-12', '十六'],
-    ['2017-4-13', '十七'],
-    ['2017-4-14', '十八'],
-    ['2017-4-15', '十九'],
-    ['2017-4-16', '二十'],
-    ['2017-4-17', '廿一'],
-    ['2017-4-18', '廿二'],
-    ['2017-4-19', '廿三'],
-    ['2017-4-20', '廿四', '穀雨'],
-    ['2017-4-21', '廿五'],
-    ['2017-4-22', '廿六'],
-    ['2017-4-23', '廿七'],
-    ['2017-4-24', '廿八'],
-    ['2017-4-25', '廿九'],
-    ['2017-4-26', '四月'],
-    ['2017-4-27', '初二'],
-    ['2017-4-28', '初三'],
-    ['2017-4-29', '初四'],
-    ['2017-4-30', '初五'],
-    ['2017-5-1', '初六'],
-    ['2017-5-2', '初七'],
-    ['2017-5-3', '初八'],
-    ['2017-5-4', '初九'],
-    ['2017-5-5', '初十', '立夏'],
-    ['2017-5-6', '十一'],
-    ['2017-5-7', '十二'],
-    ['2017-5-8', '十三'],
-    ['2017-5-9', '十四'],
-    ['2017-5-10', '十五'],
-    ['2017-5-11', '十六'],
-    ['2017-5-12', '十七'],
-    ['2017-5-13', '十八'],
-    ['2017-5-14', '十九'],
-    ['2017-5-15', '二十'],
-    ['2017-5-16', '廿一'],
-    ['2017-5-17', '廿二'],
-    ['2017-5-18', '廿三'],
-    ['2017-5-19', '廿四'],
-    ['2017-5-20', '廿五'],
-    ['2017-5-21', '廿六', '小滿'],
-    ['2017-5-22', '廿七'],
-    ['2017-5-23', '廿八'],
-    ['2017-5-24', '廿九'],
-    ['2017-5-25', '三十'],
-    ['2017-5-26', '五月'],
-    ['2017-5-27', '初二'],
-    ['2017-5-28', '初三'],
-    ['2017-5-29', '初四'],
-    ['2017-5-30', '初五'],
-    ['2017-5-31', '初六'],
-    ['2017-6-1', '初七'],
-    ['2017-6-2', '初八'],
-    ['2017-6-3', '初九'],
-    ['2017-6-4', '初十'],
-    ['2017-6-5', '十一', '芒種'],
-    ['2017-6-6', '十二'],
-    ['2017-6-7', '十三'],
-    ['2017-6-8', '十四'],
-    ['2017-6-9', '十五'],
-    ['2017-6-10', '十六'],
-    ['2017-6-11', '十七'],
-    ['2017-6-12', '十八'],
-    ['2017-6-13', '十九'],
-    ['2017-6-14', '二十'],
-    ['2017-6-15', '廿一'],
-    ['2017-6-16', '廿二'],
-    ['2017-6-17', '廿三'],
-    ['2017-6-18', '廿四'],
-    ['2017-6-19', '廿五'],
-    ['2017-6-20', '廿六'],
-    ['2017-6-21', '廿七', '夏至'],
-    ['2017-6-22', '廿八'],
-    ['2017-6-23', '廿九'],
-    ['2017-6-24', '六月'],
-    ['2017-6-25', '初二'],
-    ['2017-6-26', '初三'],
-    ['2017-6-27', '初四'],
-    ['2017-6-28', '初五'],
-    ['2017-6-29', '初六'],
-    ['2017-6-30', '初七'],
-    ['2017-7-1', '初八'],
-    ['2017-7-2', '初九'],
-    ['2017-7-3', '初十'],
-    ['2017-7-4', '十一'],
-    ['2017-7-5', '十二'],
-    ['2017-7-6', '十三'],
-    ['2017-7-7', '十四', '小暑'],
-    ['2017-7-8', '十五'],
-    ['2017-7-9', '十六'],
-    ['2017-7-10', '十七'],
-    ['2017-7-11', '十八'],
-    ['2017-7-12', '十九'],
-    ['2017-7-13', '二十'],
-    ['2017-7-14', '廿一'],
-    ['2017-7-15', '廿二'],
-    ['2017-7-16', '廿三'],
-    ['2017-7-17', '廿四'],
-    ['2017-7-18', '廿五'],
-    ['2017-7-19', '廿六'],
-    ['2017-7-20', '廿七'],
-    ['2017-7-21', '廿八'],
-    ['2017-7-22', '廿九', '大暑'],
-    ['2017-7-23', '閏六',],
-    ['2017-7-24', '初二'],
-    ['2017-7-25', '初三'],
-    ['2017-7-26', '初四'],
-    ['2017-7-27', '初五'],
-    ['2017-7-28', '初六'],
-    ['2017-7-29', '初七'],
-    ['2017-7-30', '初八'],
-    ['2017-7-31', '初九'],
-    ['2017-8-1', '初十'],
-    ['2017-8-2', '十一'],
-    ['2017-8-3', '十二'],
-    ['2017-8-4', '十三'],
-    ['2017-8-5', '十四'],
-    ['2017-8-6', '十五'],
-    ['2017-8-7', '十六', '立秋'],
-    ['2017-8-8', '十七'],
-    ['2017-8-9', '十八'],
-    ['2017-8-10', '十九'],
-    ['2017-8-11', '二十'],
-    ['2017-8-12', '廿一'],
-    ['2017-8-13', '廿二'],
-    ['2017-8-14', '廿三'],
-    ['2017-8-15', '廿四'],
-    ['2017-8-16', '廿五'],
-    ['2017-8-17', '廿六'],
-    ['2017-8-18', '廿七'],
-    ['2017-8-19', '廿八'],
-    ['2017-8-20', '廿九'],
-    ['2017-8-21', '三十'],
-    ['2017-8-22', '七月'],
-    ['2017-8-23', '初二', '處暑'],
-    ['2017-8-24', '初三'],
-    ['2017-8-25', '初四'],
-    ['2017-8-26', '初五'],
-    ['2017-8-27', '初六'],
-    ['2017-8-28', '初七'],
-    ['2017-8-29', '初八'],
-    ['2017-8-30', '初九'],
-    ['2017-8-31', '初十'],
-    ['2017-9-1', '十一'],
-    ['2017-9-2', '十二'],
-    ['2017-9-3', '十三'],
-    ['2017-9-4', '十四'],
-    ['2017-9-5', '十五'],
-    ['2017-9-6', '十六'],
-    ['2017-9-7', '十七', '白露'],
-    ['2017-9-8', '十八'],
-    ['2017-9-9', '十九'],
-    ['2017-9-10', '二十'],
-    ['2017-9-11', '廿一'],
-    ['2017-9-12', '廿二'],
-    ['2017-9-13', '廿三'],
-    ['2017-9-14', '廿四'],
-    ['2017-9-15', '廿五'],
-    ['2017-9-16', '廿六'],
-    ['2017-9-17', '廿七'],
-    ['2017-9-18', '廿八'],
-    ['2017-9-19', '廿九'],
-    ['2017-9-20', '八月'],
-    ['2017-9-21', '初二'],
-    ['2017-9-22', '初三'],
-    ['2017-9-23', '初四', '秋分'],
-    ['2017-9-24', '初五'],
-    ['2017-9-25', '初六'],
-    ['2017-9-26', '初七'],
-    ['2017-9-27', '初八'],
-    ['2017-9-28', '初九'],
-    ['2017-9-29', '初十'],
-    ['2017-9-30', '十一'],
-    ['2017-10-1', '十二'],
-    ['2017-10-2', '十三'],
-    ['2017-10-3', '十四'],
-    ['2017-10-4', '十五'],
-    ['2017-10-5', '十六'],
-    ['2017-10-6', '十七'],
-    ['2017-10-7', '十八'],
-    ['2017-10-8', '十九', '寒露'],
-    ['2017-10-9', '二十'],
-    ['2017-10-10', '廿一'],
-    ['2017-10-11', '廿二'],
-    ['2017-10-12', '廿三'],
-    ['2017-10-13', '廿四'],
-    ['2017-10-14', '廿五'],
-    ['2017-10-15', '廿六'],
-    ['2017-10-16', '廿七'],
-    ['2017-10-17', '廿八'],
-    ['2017-10-18', '廿九'],
-    ['2017-10-19', '三十'],
-    ['2017-10-20', '九月'],
-    ['2017-10-21', '初二'],
-    ['2017-10-22', '初三'],
-    ['2017-10-23', '初四', '霜降'],
-    ['2017-10-24', '初五'],
-    ['2017-10-25', '初六'],
-    ['2017-10-26', '初七'],
-    ['2017-10-27', '初八'],
-    ['2017-10-28', '初九'],
-    ['2017-10-29', '初十'],
-    ['2017-10-30', '十一'],
-    ['2017-10-31', '十二'],
-    ['2017-11-1', '十三'],
-    ['2017-11-2', '十四'],
-    ['2017-11-3', '十五'],
-    ['2017-11-4', '十六'],
-    ['2017-11-5', '十七'],
-    ['2017-11-6', '十八'],
-    ['2017-11-7', '十九', '立冬'],
-    ['2017-11-8', '二十'],
-    ['2017-11-9', '廿一'],
-    ['2017-11-10', '廿二'],
-    ['2017-11-11', '廿三'],
-    ['2017-11-12', '廿四'],
-    ['2017-11-13', '廿五'],
-    ['2017-11-14', '廿六'],
-    ['2017-11-15', '廿七'],
-    ['2017-11-16', '廿八'],
-    ['2017-11-17', '廿九'],
-    ['2017-11-18', '十月'],
-    ['2017-11-19', '初二'],
-    ['2017-11-20', '初三'],
-    ['2017-11-21', '初四'],
-    ['2017-11-22', '初五', '小雪'],
-    ['2017-11-23', '初六'],
-    ['2017-11-24', '初七'],
-    ['2017-11-25', '初八'],
-    ['2017-11-26', '初九'],
-    ['2017-11-27', '初十'],
-    ['2017-11-28', '十一'],
-    ['2017-11-29', '十二'],
-    ['2017-11-30', '十三'],
-    ['2017-12-1', '十四'],
-    ['2017-12-2', '十五'],
-    ['2017-12-3', '十六'],
-    ['2017-12-4', '十七'],
-    ['2017-12-5', '十八'],
-    ['2017-12-6', '十九'],
-    ['2017-12-7', '二十', '大雪'],
-    ['2017-12-8', '廿一'],
-    ['2017-12-9', '廿二'],
-    ['2017-12-10', '廿三'],
-    ['2017-12-11', '廿四'],
-    ['2017-12-12', '廿五'],
-    ['2017-12-13', '廿六'],
-    ['2017-12-14', '廿七'],
-    ['2017-12-15', '廿八'],
-    ['2017-12-16', '廿九'],
-    ['2017-12-17', '三十'],
-    ['2017-12-18', '十一月'],
-    ['2017-12-19', '初二'],
-    ['2017-12-20', '初三'],
-    ['2017-12-21', '初四'],
-    ['2017-12-22', '初五', '冬至'],
-    ['2017-12-23', '初六'],
-    ['2017-12-24', '初七'],
-    ['2017-12-25', '初八'],
-    ['2017-12-26', '初九'],
-    ['2017-12-27', '初十'],
-    ['2017-12-28', '十一'],
-    ['2017-12-29', '十二'],
-    ['2017-12-30', '十三'],
-    ['2017-12-31', '十四']
-];
+// const dateList = [
+//           {
+//             "value": 15,
+//             "tag": 1,
+//             "endDate": "2021-01-08",
+//             "name": "术内共好",
+//             "id": 1,
+//             "createDate": "2021-01-08"
+//           },
+//           {
+//             "value": 1,
+//             "tag": 0,
+//             "endDate": "2021-01-09",
+//             "name": "应关交名有",
+//             "id": 2,
+//             "createDate": "1976-03-22"
+//           },
+//           {
+//             "value": 13,
+//             "tag": 1,
+//             "endDate": "2021-01-18",
+//             "name": "议且市满质太",
+//             "id": 3,
+//             "createDate": "2013-12-27"
+//           },
+//           {
+//             "value": 15,
+//             "tag": 0,
+//             "endDate": "2021-01-28",
+//             "name": "权不则保场约车",
+//             "id": 4,
+//             "createDate": "2011-11-25"
+//           },
+//           {
+//             "value": 11,
+//             "tag": 1,
+//             "endDate": "2021-01-03",
+//             "name": "条识然马",
+//             "id": 5,
+//             "createDate": "1993-07-08"
+//           },
+//           {
+//             "value": 12,
+//             "tag": 1,
+//             "endDate": "2021-01-05",
+//             "name": "三花业如",
+//             "id": 6,
+//             "createDate": "2006-11-13"
+//           },
+//           {
+//             "value": 17,
+//             "tag": 0,
+//             "endDate": "2021-01-05",
+//             "name": "风非厂号影将研",
+//             "id": 7,
+//             "createDate": "1990-07-18"
+//           }
+// ];
+//请求数据后把dateList替换掉
+
+
 var heatmapData = [];
+
 var lunarData = [];
-for (var i = 0; i < dateList.length; i++) {
-    heatmapData.push([
-        dateList[i][0],
-        Math.random() * 300
-    ]);
-    lunarData.push([
-        dateList[i][0],
-        1,
-        dateList[i][1],
-        dateList[i][2]
-    ]);
+var date=new Date();
+var rangeDate;
+
+
+
+function Maxdays(year,month){
+    var now = new Date(year,month, 0);
+    var dayCount = now.getDate();
+    return dayCount;
 }
 
-// function Maxdays(year,month){
-//     var now = new Date(year,month, 0);
-//     var dayCount = now.getDate();
-//     return dayCount;
-// }
-
-class CanvasSample extends Component  {
+class EchartTest extends Component  {
     state={
-        today:'',
-        currentMonth:'',
-        currentYear:'',
+        today:date.toLocaleDateString(),
+        currentMonth:date.getMonth()+1,
+        currentYear:date.getFullYear(),
+        dateList:[]
 
     };
   raxCanvasDemo: any;
   constructor(props) {
     super(props);
-    this.raxCanvasDemo = createRef()
+    this.raxCanvasDemo = createRef();
+    this.lastMonth=this.lastMonth.bind(this);
+    this.nextMonth=this.nextMonth.bind(this);
   }
   componentDidMount() {
+     
 
     //数据准备
     //1.获取当前年月及日期
-    var date=new Date();
-    var rangeDate;
-    this.setState({
-        today:date.toLocaleDateString(),
-        currentMonth:(date.getMonth()+1).toString(),
-        currentYear:(date.getFullYear()).toString(),
+    // var date=new Date();
+    // var rangeDate;
+    // this.setState({
+    //     today:date.toLocaleDateString(),
+    //     currentMonth:date.getMonth()+1,
+    //     currentYear:date.getFullYear(),
 
-    },()=>{
-        rangeDate= this.state.currentYear+'-'+this.state.currentMonth;
+    // },()=>{
+        rangeDate= this.state.currentYear.toString()+'-'+this.state.currentMonth.toString();
+        console.log(rangeDate)
         // const id = this.raxCanvasDemo.current.props.id;
+
+        //网络请求
+        request({
+            url:'https://alibaba.github,io/rax/',
+            method:'GET',
+            data:{rangeDate}
+        }).then((response)=>{
+            this.setState({
+                dateList:response.data.data
+            })
+        })
+
+
+
+
+        //2.生成日期
+        var days=Maxdays(this.state.currentYear.toString(),this.state.currentMonth.toString())
+        var list=[];
+        var item='';
+        for(var i=1;i<=days;i++){
+            item=rangeDate+'-'+i.toString();
+            list.push(item);
+        }
+        for (var i = 0; i < list.length; i++) {
+            heatmapData.push([
+                list[i],
+                0
+            ]);
+            lunarData.push([
+                list[i]
+            ]);
+        }
+        for (var i = 0; i < this.state.dateList.length; i++) {
+            let date=new Date(this.state.dateList[i].endDate.replace(/-/,"/")) ;
+            let index=date.getDate()-1;
+            heatmapData[index][1]++;
+        }
+
+
+
     // console.log(id)
     // 基于准备好的dom，初始化echarts实例
     const chartDom=document.getElementById("main") as HTMLElement;
@@ -434,14 +166,16 @@ class CanvasSample extends Component  {
             position: 'top',
             //提示框浮层内容格式器，支持字符串模板和回调函数两种形式。
             formatter: function (params) {
-                return '降雨量: ' + params.value[1].toFixed(2);
+                //console.log(params)
+                if(params.value.length>1)
+                return '打卡数: ' + params.value[1];
             }
         },
     //视觉映射组件
         visualMap: {
             show: false,//是否显示 visualMap-continuous 组件。如果设置为 false，不会显示，但是数据映射的功能还存在
             min: 0,
-            max: 300,
+            max: 10,
             //视觉映射的『定义域』
             calculable: true,//是否显示拖拽用的手柄（手柄能拖拽调整选中范围）
             seriesIndex: [1],//指定取哪个系列的数据
@@ -449,7 +183,7 @@ class CanvasSample extends Component  {
             left: 'center',
             bottom: 20,
             inRange: {//定义 在选中范围中 的视觉元素。
-                color: ['#e0ffff', '#006edd'],
+                color: ['#FFFFFF', '#FF0000'],
                 opacity: 0.3
             },
             controller: {
@@ -462,7 +196,7 @@ class CanvasSample extends Component  {
         calendar: [{
             left: 'center',//calendar组件离容器左侧的距离
             top: 'middle',//calendar组件离容器上侧的距离。
-            cellSize: 'auto',//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
+            cellSize: [50,50],//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
             yearLabel: {show: true},
             orient: 'vertical',
             dayLabel: {
@@ -497,25 +231,300 @@ class CanvasSample extends Component  {
     
         //热力图（降雨量）
         {
-            name: '降雨量',
+            name: '打卡数',
             type: 'heatmap',
             coordinateSystem: 'calendar',
             data: heatmapData
         }]
     });
 
-
-
-
-
-    })
+    // })
+}
     
-    
+  lastMonth(){
+      console.log("shanggeyue")
+      var month=this.state.currentMonth;
+      var year=this.state.currentYear
+      this.setState({
+        currentMonth:month===1 ? 12: month-1,
+        currentYear:month===1 ?year-1 : year
+      },()=>{
+        rangeDate= this.state.currentYear.toString()+'-'+this.state.currentMonth.toString();
+        console.log("上个月",rangeDate)
+        // const id = this.raxCanvasDemo.current.props.id;
+  
+        request({
+            url:'https://alibaba.github,io/rax/',
+            method:'GET',
+            data:{rangeDate}
+        }).then((response)=>{
+            this.setState({
+                dateList:response.data.data
+            })
+        })
 
 
+
+
+        //2.生成日期
+        var days=Maxdays(this.state.currentYear.toString(),this.state.currentMonth.toString())
+        var list=[];
+        var item='';
+        for(var i=1;i<=days;i++){
+            item=rangeDate+'-'+i.toString();
+            list.push(item);
+        }
+        for (var i = 0; i < list.length; i++) {
+            heatmapData.push([
+                list[i],
+                0
+            ]);
+            lunarData.push([
+                list[i]
+            ]);
+        }
+        for (var i = 0; i < this.state.dateList.length; i++) {
+            let date=new Date(this.state.dateList[i].endDate.replace(/-/,"/")) ;
+            let index=date.getDate()-1;
+            heatmapData[index][1]++;
+        }
+  
+  
+        document.getElementById('main').removeAttribute('_echarts_instance_'); // 移除容器上的 _echarts_instance_
+  
+    // console.log(id)
+    // 基于准备好的dom，初始化echarts实例
+    const chartDom=document.getElementById("main") as HTMLElement;
+    console.log(chartDom)
+    var myChart = echarts.init(chartDom);
+    // 绘制图表
+    myChart.setOption({
+        //指定配置项和数据
+  
+        //提示框组件
+        tooltip: {
+            show:true,
+            trigger:'item',
+            position: 'top',
+            //提示框浮层内容格式器，支持字符串模板和回调函数两种形式。
+            formatter: function (params) {
+                //console.log(params)
+                if(params.value.length>1)
+                return '打卡数: ' + params.value[1];
+            }
+        },
+    //视觉映射组件
+        visualMap: {
+            show: false,//是否显示 visualMap-continuous 组件。如果设置为 false，不会显示，但是数据映射的功能还存在
+            min: 0,
+            max: 10,
+            //视觉映射的『定义域』
+            calculable: true,//是否显示拖拽用的手柄（手柄能拖拽调整选中范围）
+            seriesIndex: [1],//指定取哪个系列的数据
+            orient: 'horizontal',
+            left: 'center',
+            bottom: 20,
+            inRange: {//定义 在选中范围中 的视觉元素。
+                color: ['#FFFFFF', '#FF0000'],
+                opacity: 0.3
+            },
+            controller: {
+                inRange: {
+                    opacity: 0.5
+                }
+            }
+        },
     
+        calendar: [{
+            left: 'center',//calendar组件离容器左侧的距离
+            top: 'middle',//calendar组件离容器上侧的距离。
+            cellSize: [50,50],//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
+            yearLabel: {show: true},
+            orient: 'vertical',
+            dayLabel: {
+                firstDay: 1,
+                nameMap: 'cn',
+                show:true,
+            },
+            monthLabel: {
+                show: true
+            },
+            range:rangeDate
+        }],
+    //系列（series）是指：一组数值以及他们映射成的图
+    //一个 系列 包含的要素至少有：一组数值、图表类型（series.type）、以及其他的关于这些数据如何映射成图的参数
+        series: [
+            //散点图
+            {
+            type: 'scatter',
+            coordinateSystem: 'calendar',
+            symbolSize: 1,
+            label: {
+                show: true,
+                formatter: function (params) {
+                    var d = echarts.number.parseDate(params.value[0]);
+                    return d.getDate(); 
+                    //+ '\n\n' + params.value[2] + '\n\n';
+                },
+                color: '#000'
+            },
+            data: lunarData
+        }, 
     
+        //热力图
+        {
+            name: '打卡数',
+            type: 'heatmap',
+            coordinateSystem: 'calendar',
+            data: heatmapData
+        }]
+    });
+      })
   }
+
+nextMonth(){
+    console.log("xiageyue")
+    var month=this.state.currentMonth;
+      var year=this.state.currentYear
+      this.setState({
+        currentMonth:month===12 ? 1: month+1,
+        currentYear:month===12 ?year+1 : year
+      },()=>{
+        rangeDate= this.state.currentYear.toString()+'-'+this.state.currentMonth.toString();
+        console.log("上个月",rangeDate)
+        // const id = this.raxCanvasDemo.current.props.id;
+  
+        request({
+            url:'https://alibaba.github,io/rax/',
+            method:'GET',
+            data:{rangeDate}
+        }).then((response)=>{
+            this.setState({
+                dateList:response.data.data
+            })
+        })
+
+
+
+        //2.生成日期
+        var days=Maxdays(this.state.currentYear.toString(),this.state.currentMonth.toString())
+        var list=[];
+        var item='';
+        for(var i=1;i<=days;i++){
+            item=rangeDate+'-'+i.toString();
+            list.push(item);
+        }
+        for (var i = 0; i < list.length; i++) {
+            heatmapData.push([
+                list[i],
+                0
+            ]);
+            lunarData.push([
+                list[i]
+            ]);
+        }
+        for (var i = 0; i < this.state.dateList.length; i++) {
+            let date=new Date(dateList[i].endDate.replace(/-/,"/")) ;
+            let index=date.getDate()-1;
+            heatmapData[index][1]++;
+        }
+  
+  
+        document.getElementById('main').removeAttribute('_echarts_instance_'); // 移除容器上的 _echarts_instance_
+  
+    // console.log(id)
+    // 基于准备好的dom，初始化echarts实例
+    const chartDom=document.getElementById("main") as HTMLElement;
+    console.log(chartDom)
+    var myChart = echarts.init(chartDom);
+    // 绘制图表
+    myChart.setOption({
+        //指定配置项和数据
+  
+        //提示框组件
+        tooltip: {
+            show:true,
+            trigger:'item',
+            position: 'top',
+            //提示框浮层内容格式器，支持字符串模板和回调函数两种形式。
+            formatter: function (params) {
+                //console.log(params)
+                if(params.value.length>1)
+                return '打卡数: ' + params.value[1];
+            }
+        },
+    //视觉映射组件
+        visualMap: {
+            show: false,//是否显示 visualMap-continuous 组件。如果设置为 false，不会显示，但是数据映射的功能还存在
+            min: 0,
+            max: 10,
+            //视觉映射的『定义域』
+            calculable: true,//是否显示拖拽用的手柄（手柄能拖拽调整选中范围）
+            seriesIndex: [1],//指定取哪个系列的数据
+            orient: 'horizontal',
+            left: 'center',
+            bottom: 20,
+            inRange: {//定义 在选中范围中 的视觉元素。
+                color: ['#FFFFFF', '#FF0000'],
+                opacity: 0.3
+            },
+            controller: {
+                inRange: {
+                    opacity: 0.5
+                }
+            }
+        },
+    
+        calendar: [{
+            left: 'center',//calendar组件离容器左侧的距离
+            top: 'middle',//calendar组件离容器上侧的距离。
+            cellSize: [50,50],//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
+            yearLabel: {show: true},
+            orient: 'vertical',
+            dayLabel: {
+                firstDay: 1,
+                nameMap: 'cn',
+                show:true,
+            },
+            monthLabel: {
+                show: true
+            },
+            range:rangeDate
+        }],
+    //系列（series）是指：一组数值以及他们映射成的图
+    //一个 系列 包含的要素至少有：一组数值、图表类型（series.type）、以及其他的关于这些数据如何映射成图的参数
+        series: [
+            //散点图
+            {
+            type: 'scatter',
+            coordinateSystem: 'calendar',
+            symbolSize: 1,
+            label: {
+                show: true,
+                formatter: function (params) {
+                    var d = echarts.number.parseDate(params.value[0]);
+                    return d.getDate(); 
+                    //+ '\n\n' + params.value[2] + '\n\n';
+                },
+                color: '#000'
+            },
+            data: lunarData
+        }, 
+    
+        //热力图
+        {
+            name: '打卡数',
+            type: 'heatmap',
+            coordinateSystem: 'calendar',
+            data: heatmapData
+        }]
+    });
+      })
+
+}
+    
+    
+  
 
   render() {
     return (
@@ -529,19 +538,25 @@ class CanvasSample extends Component  {
     //     ref={this.raxCanvasDemo}
     //     id="main"
     //   />
+    <>
+    <button onClick={this.lastMonth}>上月</button>
+    <button onClick={this.nextMonth}>下月</button>
     <div
     style={{
-      width: 350,
-      height: 350,
+      width: 750,
+      height: 250,
     }}
     //@ts-ignore
     ref={this.raxCanvasDemo}
     id="main"
   />
+  
+  </>
     );
   }
 }
 
+
 // //@ts-ignore
 // render(<CanvasSample />, document.body, { driver: DriverUniversal })
-export { CanvasSample as default };
+export { EchartTest as default };
