@@ -2,6 +2,7 @@ import { createElement, Component, render, createRef } from 'rax';
 import Canvas from 'rax-canvas';
 import DriverUniversal from 'driver-universal';
 import F2 from '@antv/f2';
+import view from 'rax-view';
 
 interface Data {
   date: string;
@@ -93,19 +94,18 @@ const data = [
 ];
 
 export default class GroupHistograms extends Component {
-  state={
-    date:new Date(),//当前日期Date对象
-    today:new Date().getDate(),//当前日期 如2021/1/31
-    data:[],
-  }
+  state = {
+    date: new Date(), //当前日期Date对象
+    today: new Date().getDate(), //当前日期 如2021/1/31
+    data: [],
+  };
   constructor(props) {
     super(props);
     //@ts-ignore
     this.raxCanvasDemo = createRef();
     //@ts-ignore
-    this.tomorrow=this.tomorrow.bind(this);
-    this.yesterday=this.yesterday.bind(this);
-    
+    this.tomorrow = this.tomorrow.bind(this);
+    this.yesterday = this.yesterday.bind(this);
   }
 
   componentDidMount() {
@@ -159,50 +159,68 @@ export default class GroupHistograms extends Component {
     });
     chart.render();
   }
-  yesterday(){
-    var temp=this.state.date.getTime()-(1*(1000*60*60*24))
-    var yester=new Date();
+  yesterday() {
+    var temp = this.state.date.getTime() - 1 * (1000 * 60 * 60 * 24);
+    var yester = new Date();
     yester.setTime(temp);
-    this.setState({
-      today:yester.toLocaleDateString(),
-      date:yester,
-    },()=>{
-      console.log("昨天是：",this.state.today)
-      //请求在这里进行
-      //如果需要重新画图也在这里画
-    })
-
+    this.setState(
+      {
+        today: yester.toLocaleDateString(),
+        date: yester,
+      },
+      () => {
+        console.log('昨天是：', this.state.today);
+        //请求在这里进行
+        //如果需要重新画图也在这里画
+      },
+    );
   }
-  tomorrow(){
-    var temp=this.state.date.getTime()+(1*(1000*60*60*24))
-    var yester=new Date();
+  tomorrow() {
+    var temp = this.state.date.getTime() + 1 * (1000 * 60 * 60 * 24);
+    var yester = new Date();
     yester.setTime(temp);
-    this.setState({
-      today:yester.toLocaleDateString(),
-      date:yester,
-    },()=>{
-      console.log("明天是：",this.state.today)
-      //请求在这里进行
-      //如果需要重新画图也在这里画
-    })
-
+    this.setState(
+      {
+        today: yester.toLocaleDateString(),
+        date: yester,
+      },
+      () => {
+        console.log('明天是：', this.state.today);
+        //请求在这里进行
+        //如果需要重新画图也在这里画
+      },
+    );
   }
 
   render() {
     return (
-      <>
-      <button onClick={this.yesterday}>前一天</button>
-      <button onClick={this.tomorrow}>后一天</button>
-      <Canvas
-        style={{
-          width: 750,
-          height: 375,
-        }}
-        //@ts-ignore
-        ref={this.raxCanvasDemo}
-        id="canv1"
-      />
-      </>
+      <view
+      style={{
+        height: 400,
+        width: 750,
+        position: 'relative',
+      }}
+      >
+        <Canvas
+          style={{
+            display: 'block',
+            width: 750,
+            height: 375,
+          }}
+          //@ts-ignore
+          ref={this.raxCanvasDemo}
+          id="canv1"
+        />
+        <view
+          style={{
+            position: 'absolute',
+            transform: 'translateX(-50%)',
+          }}
+        >
+          <button onClick={this.yesterday}>前一天</button>
+          <button onClick={this.tomorrow}>后一天</button>
+        </view>
+      </view>
     );
   }
 }

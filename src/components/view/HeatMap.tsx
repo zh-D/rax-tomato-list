@@ -1,6 +1,8 @@
 import { createElement, Component, createRef } from 'rax';
 import Canvas from 'rax-canvas';
 import F2 from '@antv/f2';
+import request from 'universal-request';
+import view from 'rax-view';
 
 interface Data {
   hour: number;
@@ -81,21 +83,37 @@ for (let i = 0; i < data.length; i++) {
 }
 console.log(source);
 
+let thisMonday;
+let nextMonday;
+let lastMonday;
+
 export default class HeatMap extends Component {
-  state={
-    date:new Date(),//当前Date
-    day:new Date().getDay(),//今天星期几0-6
-    thisWeekBegin:new Date(new Date().getTime()-(new Date().getDay()*(1000*60*60*24))),//这周第一天的Date对象 星期日
-    thisWeekEnd:new Date(new Date().getTime()-((-6+new Date().getDay())*(1000*60*60*24)))//这周最后一天的Date对象
-  }
+  state = {
+    date: new Date(), //当前Date
+    day: new Date().getDay(), //今天星期几0-6
+    thisWeekBegin: new Date(new Date().getTime() - new Date().getDay() * 30 * (1000 * 60 * 60 * 24)), //这周第一天的Date对象 星期日
+    // thisWeekEnd: new Date(new Date().getTime() - (-6 + new Date().getDay()) * (1000 * 60 * 60 * 24)), //这周最后一天的Date对象
+    dataSource: [],
+  };
   constructor(props) {
     super(props);
     //@ts-ignore
     this.raxCanvasDemo = createRef();
-    this.lastWeek=this.lastWeek.bind(this);
-    this.nextWeek=this.nextWeek.bind(this)
+    this.lastWeek = this.lastWeek.bind(this);
+    this.nextWeek = this.nextWeek.bind(this);
   }
   componentDidMount() {
+    thisMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
+
+    request({
+      url: 'https://alibaba.github,io/rax/',
+      method: 'GET',
+      data: { thisMonday },
+    }).then((response) => {
+      this.setState({
+        dataSource: response.data.data,
+      });
+    });
     //@ts-ignore
     const id = this.raxCanvasDemo.current.props.id;
     console.log(id);
@@ -103,7 +121,7 @@ export default class HeatMap extends Component {
       id,
       pixelRatio: window.devicePixelRatio,
     });
-    chart.source(source, {
+    chart.source(this.state.dataSource, {
       hour: {
         type: 'cat',
         values: ['3', '6', '9', '12', '15', '18', '21', '24'],
@@ -145,65 +163,97 @@ export default class HeatMap extends Component {
     // context.fillRect(0, 0, 100, 100);
   }
 
-  lastWeek(){
-    
-    var lastWeekBeginTemp=this.state.thisWeekBegin.getTime()-(6*(1000*60*60*24));
-    var lastWeekEndTemp=this.state.thisWeekEnd.getTime()-(6*(1000*60*60*24));
-    var lastWeekBegin=new Date();
+  lastWeek() {
+    var lastWeekBeginTemp = this.state.thisWeekBegin.getTime() - 7 * (1000 * 60 * 60 * 24);
+    // var lastWeekEndTemp = this.state.thisWeekEnd.getTime() - 7 * (1000 * 60 * 60 * 24);
+    var lastWeekBegin = new Date();
     lastWeekBegin.setTime(lastWeekBeginTemp);
-    var lastWeekEnd=new Date();
-    lastWeekEnd.setTime(lastWeekEndTemp);
-    this.setState({
-      thisWeekBegin:lastWeekBegin,
-      thisWeekEnd:lastWeekEnd,
-    },()=>{
-      console.log('上周一是',this.state.thisWeekBegin.toLocaleDateString())
-      console.log('上周末是',this.state.thisWeekEnd.toLocaleDateString())
-      //请求写在这里
-    })
-
-    
-
+    // var lastWeekEnd = new Date();
+    // lastWeekEnd.setTime(lastWeekEndTemp);
+    this.setState(
+      {
+        thisWeekBegin: lastWeekBegin,
+        // thisWeekEnd: lastWeekEnd,
+      },
+      () => {
+        //请求写在这里
+        lastMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
+        console.log('上周一是', lastMonday);
+        // console.log('上周末是', this.state.thisWeekEnd.toLocaleDateString());
+        request({
+          url: 'https://alibaba.github,io/rax/',
+          method: 'GET',
+          data: { lastMonday },
+        }).then((response) => {
+          this.setState({
+            dataSource: response.data.data,
+          });
+        });
+      },
+    );
   }
 
-  nextWeek(){
-    console.log(this.state.date.getDay())
-    console.log(this.state.thisWeekBegin)
-    console.log(this.state.thisWeekEnd)
-    var nextWeekBeginTemp=this.state.thisWeekBegin.getTime()+(7*(1000*60*60*24));
-    var nextWeekEndTemp=this.state.thisWeekEnd.getTime()+(7*(1000*60*60*24));
-    var nextWeekBegin=new Date();
+  nextWeek() {
+    console.log(this.state.date.getDay());
+    console.log(this.state.thisWeekBegin);
+    // console.log(this.state.thisWeekEnd);
+    var nextWeekBeginTemp = this.state.thisWeekBegin.getTime() + 7 * (1000 * 60 * 60 * 24);
+    // var nextWeekEndTemp = this.state.thisWeekEnd.getTime() + 7 * (1000 * 60 * 60 * 24);
+    var nextWeekBegin = new Date();
     nextWeekBegin.setTime(nextWeekBeginTemp);
-    var nextWeekEnd=new Date();
-    nextWeekEnd.setTime(nextWeekEndTemp);
-    this.setState({
-      thisWeekBegin:nextWeekBegin,
-      thisWeekEnd:nextWeekEnd,
-    },()=>{
-      console.log('下周日是',this.state.thisWeekBegin.toLocaleDateString())
-      console.log('下周六是',this.state.thisWeekEnd.toLocaleDateString())
-      //请求写在这里
-    })
-
+    // var nextWeekEnd = new Date();
+    // nextWeekEnd.setTime(nextWeekEndTemp);
+    this.setState(
+      {
+        thisWeekBegin: nextWeekBegin,
+        // thisWeekEnd: nextWeekEnd,
+      },
+      () => {
+        nextMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
+        console.log('下周一是', nextMonday);
+        // console.log('下周末是', this.state.thisWeekEnd.toLocaleDateString());
+        request({
+          url: 'https://alibaba.github,io/rax/',
+          method: 'GET',
+          data: { nextMonday },
+        }).then((response) => {
+          this.setState({
+            dataSource: response.data.data,
+          });
+        });
+      },
+    );
   }
 
   render() {
     return (
-      <>
-      <button onClick={this.lastWeek}>前一周</button>
-      <button onClick={this.nextWeek}>后一周</button>
-      <Canvas
-        catchtouchstart="touchStart"
-        catchtouchend="touchEnd"
+      <view
         style={{
+          height: 400,
           width: 750,
-          height: 375,
+          position: 'relative',
         }}
-        //@ts-ignore
-        ref={this.raxCanvasDemo}
-        id="canv2"
-      />
-      </>
+      >
+        <Canvas
+          style={{
+            display: 'block',
+            width: 750,
+            height: 375,
+          }}
+          //@ts-ignore
+          ref={this.raxCanvasDemo}
+          id="canv2"
+        />
+        <view
+          style={{
+            position: 'absolute',
+            transform: 'translateX(-50%)',
+          }}
+        >
+          <button onClick={this.lastWeek}>前一周</button>
+          <button onClick={this.nextWeek}>后一周</button>
+        </view>
+      </view>
     );
   }
 }

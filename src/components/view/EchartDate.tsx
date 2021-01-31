@@ -187,7 +187,7 @@ class EchratDate extends Component {
         {
           left: 'center', //calendar组件离容器左侧的距离
           top: 'middle', //calendar组件离容器上侧的距离。
-          cellSize: [60, 60], //日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。
+          cellSize: [45, 45], //日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。
           yearLabel: { show: true },
           orient: 'vertical',
           dayLabel: {
@@ -329,7 +329,7 @@ class EchratDate extends Component {
             {
               left: 'center', //calendar组件离容器左侧的距离
               top: 'middle', //calendar组件离容器上侧的距离。
-              cellSize: [60, 60], //日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。
+              cellSize: [45, 45], //日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。
               yearLabel: { show: true },
               orient: 'vertical',
               dayLabel: {
@@ -471,7 +471,7 @@ class EchratDate extends Component {
             {
               left: 'center', //calendar组件离容器左侧的距离
               top: 'middle', //calendar组件离容器上侧的距离。
-              cellSize: [60, 60], //日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。
+              cellSize: [45, 45], //日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。
               yearLabel: { show: true },
               orient: 'vertical',
               dayLabel: {
@@ -540,9 +540,8 @@ class EchratDate extends Component {
         <view
           style={{
             width: 750,
-            height: 750,
+            height: 700,
             marginTop: 20,
-            // position: 'relative',
           }}
           //@ts-ignore
           ref={this.raxCanvasDemo}
