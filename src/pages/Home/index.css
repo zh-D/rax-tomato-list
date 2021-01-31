@@ -82,3 +82,10 @@
 .checked.todo-item::after {
   opacity: 1;
 }
+
+.deleteButton {
+  display: none;
+}
+.deleteButton :hover {
+  display: block;
+}

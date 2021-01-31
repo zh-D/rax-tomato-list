@@ -23,6 +23,10 @@
     {
       "path": "/regist",
       "source": "pages/Regist/index"
+    },
+    {
+      "path": "/add",
+      "source": "pages/addTodo/index"
     }
   ],
   "tabBar": {

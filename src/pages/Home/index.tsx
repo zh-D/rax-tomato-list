@@ -1,17 +1,38 @@
 import { createElement, useEffect, useState, useRef } from 'rax';
 import View from 'rax-view';
 // import Text from 'rax-text';
+import TextInput from 'rax-textinput'
 import store from '@/store';
 import { history } from 'rax-app';
 import homeImage from '../../components/image/home_background.png'
 import menuImage from '../../components/image/home_menu.svg'
 import bellImage from '../../components/image/bell.svg'
 import addImage from '../../components/image/add.svg'
+import loginImage from '../../components/image/login-image.jpg'
+import tomato from '../../components/image/tomato.png'
 import './index.css';
 
 
 
-
+const styles = {
+  Input: {
+    border: '1px solid gray',
+    borderRadius: '5px',
+    width: '90%',
+    float: 'right',
+    margin: '5px 5%'
+  },
+  Button: {
+    width: '90%',
+    margin: '50rpx 5%',
+    padding: '5px',
+    border: '1px solid white',
+    borderRadius: '5px',
+    backgroundColor: '#f15858',
+    color: 'white',
+    fontSize: '15px',
+  }
+}
 
 
 
@@ -133,18 +154,37 @@ export default function Home() {
             })
           }
           <View>
-            <img src={addImage} height={40} style={{position: 'fixed',bottom:'10%',right:'5%'}} />
+            <img 
+            src={addImage}
+             height={40} 
+             style={{position: 'fixed',bottom:'12%',right:'5%'}} 
+             onClick={()=>{
+              history.push('/add');
+             }} 
+             />
           </View>
         </View>
         
       ) : (
-        <button
-          onClick={() => {
-            history.push('/login');
-          }}
-        >
-          登录
+        <View style={{height: '500rpx'}}>
+          <div style={{textAlign:'center',height:'80px'}}>
+            <img src={loginImage} />
+          </div>
+          <div  style={{marginTop:'35%'}} >
+            <button
+            type='submit'
+              style={styles.Button}
+              onClick={() => {
+                history.push('/login');
+              }}
+            >
+          登 录/注 册
         </button>
+        </div>
+        <div style={{marginTop:'20rpx'}} >
+          <img src={tomato} alt="tomato"/>
+        </div>
+      </View>
       )}
     </View>
   );
