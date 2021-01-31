@@ -93,6 +93,9 @@ const data = [
   },
 ];
 
+let yesterday;
+let tomorrow;
+
 export default class GroupHistograms extends Component {
   state = {
     date: new Date(), //当前日期Date对象
@@ -195,11 +198,11 @@ export default class GroupHistograms extends Component {
   render() {
     return (
       <view
-      style={{
-        height: 400,
-        width: 750,
-        position: 'relative',
-      }}
+        style={{
+          height: 400,
+          width: 750,
+          position: 'relative',
+        }}
       >
         <Canvas
           style={{
