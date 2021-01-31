@@ -30,7 +30,7 @@
     "rax-scrollview": "^3.3.6",
     "rax-text": "^2.0.0",
     "rax-textinput": "^1.3.9",
-    "rax-view": "^2.0.0",
+    "rax-view": "^2.0.4",
     "universal-request": "^2.2.0"
   },
   "devDependencies": {
