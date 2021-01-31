@@ -4,6 +4,7 @@ import View from 'rax-view';
 import Text from 'rax-text';
 import GroupHistograms from '../../components/View/GroupHistograms';
 import styles from './index.module.css';
+import EchartDate from '../../components/View/EchartDate';
 
 export default function Login() {
   return (
@@ -15,6 +16,10 @@ export default function Login() {
       <View style={{ textAlign: 'center', marginTop: 100 }}>
         <Text>周管理</Text>
         <HeatMap />
+      </View>
+      <View style={{ textAlign: 'center', marginTop: 100 }}>
+        <Text>月管理</Text>
+        <EchartDate />
       </View>
     </View>
   );
