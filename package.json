@@ -13,13 +13,13 @@
     "rapper": "rapper --type normal --rapperPath \"src/rapper\" --apiUrl \"http://rap2api.taobao.org/repository/get?id=276879&token=WCPOMafC9zde2A_XvIMn8roR3_dxYnH5\" --rapUrl \"http://rap2.taobao.org\""
   },
   "dependencies": {
+    "@antv/f2": "^3.8.1",
     "calendar": "^0.1.1",
     "echarts": "^5.0.1",
     "from": "^0.1.7",
     "mini-ali-ui": "^1.3.1",
     "radio": "^0.2.0",
     "radio-group": "0.0.2",
-    "@antv/f2": "^3.8.1",
     "rap": "^1.1.6",
     "rax": "^1.1.0",
     "rax-canvas": "^2.2.2",
