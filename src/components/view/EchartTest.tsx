@@ -154,8 +154,8 @@ class CanvasSample extends Component  {
                 list[i]
             ]);
         }
-        for (var i = 0; i < dateList.length; i++) {
-            let date=new Date(dateList[i].endDate.replace(/-/,"/")) ;
+        for (var i = 0; i < this.state.dateList.length; i++) {
+            let date=new Date(this.state.dateList[i].endDate.replace(/-/,"/")) ;
             let index=date.getDate()-1;
             heatmapData[index][1]++;
         }
@@ -208,7 +208,7 @@ class CanvasSample extends Component  {
         calendar: [{
             left: 'center',//calendar组件离容器左侧的距离
             top: 'middle',//calendar组件离容器上侧的距离。
-            cellSize: [30,30],//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
+            cellSize: 'auto',//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
             yearLabel: {show: true},
             orient: 'vertical',
             dayLabel: {
@@ -295,8 +295,8 @@ class CanvasSample extends Component  {
                 list[i]
             ]);
         }
-        for (var i = 0; i < dateList.length; i++) {
-            let date=new Date(dateList[i].endDate.replace(/-/,"/")) ;
+        for (var i = 0; i < this.state.dateList.length; i++) {
+            let date=new Date(this.state.dateList[i].endDate.replace(/-/,"/")) ;
             let index=date.getDate()-1;
             heatmapData[index][1]++;
         }
@@ -350,7 +350,7 @@ class CanvasSample extends Component  {
         calendar: [{
             left: 'center',//calendar组件离容器左侧的距离
             top: 'middle',//calendar组件离容器上侧的距离。
-            cellSize: [30,30],//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
+            cellSize:'auto',//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
             yearLabel: {show: true},
             orient: 'vertical',
             dayLabel: {
@@ -435,8 +435,8 @@ nextMonth(){
                 list[i]
             ]);
         }
-        for (var i = 0; i < dateList.length; i++) {
-            let date=new Date(dateList[i].endDate.replace(/-/,"/")) ;
+        for (var i = 0; i < this.state.dateList.length; i++) {
+            let date=new Date(this.state.dateList[i].endDate.replace(/-/,"/")) ;
             let index=date.getDate()-1;
             heatmapData[index][1]++;
         }
@@ -490,7 +490,7 @@ nextMonth(){
         calendar: [{
             left: 'center',//calendar组件离容器左侧的距离
             top: 'middle',//calendar组件离容器上侧的距离。
-            cellSize: [30,30],//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
+            cellSize: 'auto',//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
             yearLabel: {show: true},
             orient: 'vertical',
             dayLabel: {
@@ -552,16 +552,17 @@ nextMonth(){
     //   />
     <>
     <button onClick={this.lastMonth}>上月</button>
+    <button onClick={this.nextMonth}>下月</button>
     <div
     style={{
-      width: 350,
-      height: 350,
+      width: 500,
+      height: 100,
     }}
     //@ts-ignore
     ref={this.raxCanvasDemo}
     id="main"
   />
-  <button onClick={this.nextMonth}>下月</button>
+  
   </>
     );
   }
