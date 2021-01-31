@@ -2,6 +2,12 @@ import { createElement, Component, createRef } from 'rax';
 import Canvas from 'rax-canvas';
 import F2 from '@antv/f2';
 
+interface Data {
+  hour: number;
+  week: number;
+  value: number;
+}
+
 const data = [
   [0, 0, 10],
   [0, 1, 19],
@@ -65,14 +71,15 @@ for (let i = 0; i < data.length; i++) {
   const item = data[i];
   const obj = {};
   //@ts-ignore
-  obj.name = item[0];
+  obj.hour = item[0];
   //@ts-ignore
-  obj.day = item[1];
+  obj.week = item[1];
   //@ts-ignore
-  obj.sales = item[2];
+  obj.value = item[2];
   //@ts-ignore
   source.push(obj);
 }
+console.log(source);
 
 export default class HeatMap extends Component {
   constructor(props) {
@@ -89,20 +96,31 @@ export default class HeatMap extends Component {
       pixelRatio: window.devicePixelRatio,
     });
     chart.source(source, {
-      name: {
+      hour: {
         type: 'cat',
         values: ['3', '6', '9', '12', '15', '18', '21', '24'],
       },
-      day: {
+      week: {
         type: 'cat',
         values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
       },
     });
 
+    chart.tooltip({
+      custom: true,
+      showXTip: true,
+      showYTip: true,
+      snap: true,
+      crosshairsType: 'xy',
+      crosshairsStyle: {
+        lineDash: [2],
+      },
+    });
+
     chart
       .polygon()
-      .position('name*day')
-      .color('sales', '#BAE7FF-#1890FF-#0050B3')
+      .position('hour*week')
+      .color('value', '#BAE7FF-#1890FF-#0050B3')
       .style({
         lineWidth: 1,
         stroke: '#fff',
