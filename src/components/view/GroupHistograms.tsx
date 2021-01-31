@@ -3,6 +3,7 @@ import Canvas from 'rax-canvas';
 import DriverUniversal from 'driver-universal';
 import F2 from '@antv/f2';
 import view from 'rax-view';
+import request from 'universal-request';
 
 interface Data {
   date: string;
@@ -94,13 +95,14 @@ const data = [
 ];
 
 let yesterday;
+let today;
 let tomorrow;
 
 export default class GroupHistograms extends Component {
   state = {
     date: new Date(), //当前日期Date对象
     today: new Date().getDate(), //当前日期 如2021/1/31
-    data: [],
+    dataSource: [],
   };
   constructor(props) {
     super(props);
@@ -113,6 +115,20 @@ export default class GroupHistograms extends Component {
 
   componentDidMount() {
     // 直接发起网络请求
+
+    today = this.state.date.toLocaleDateString().split('/').join('-');
+    console.log('今天', today);
+
+    request({
+      url: 'https://alibaba.github,io/rax/',
+      method: 'GET',
+      data: { today },
+    }).then((response) => {
+      this.setState({
+        dataSource: response.data.data,
+      });
+    });
+
     // @ts-ignore
     const { id } = this.raxCanvasDemo.current.props;
     console.log(id);
@@ -120,7 +136,7 @@ export default class GroupHistograms extends Component {
       id,
       pixelRatio: window.devicePixelRatio,
     });
-    chart.source(data, {
+    chart.source(this.state.dataSource, {
       date: {
         formatter: function formatter(val) {
           return val.slice(-5, -3);
@@ -172,7 +188,17 @@ export default class GroupHistograms extends Component {
         date: yester,
       },
       () => {
-        console.log('昨天是：', this.state.today);
+        yesterday = this.state.today;
+        console.log('昨天是：', yesterday);
+        request({
+          url: 'https://alibaba.github,io/rax/',
+          method: 'GET',
+          data: { yesterday },
+        }).then((response) => {
+          this.setState({
+            dataSource: response.data.data,
+          });
+        });
         //请求在这里进行
         //如果需要重新画图也在这里画
       },
@@ -188,7 +214,17 @@ export default class GroupHistograms extends Component {
         date: yester,
       },
       () => {
-        console.log('明天是：', this.state.today);
+        tomorrow = this.state.today;
+        console.log('明天是：', tomorrow);
+        request({
+          url: 'https://alibaba.github,io/rax/',
+          method: 'GET',
+          data: { tomorrow },
+        }).then((response) => {
+          this.setState({
+            dataSource: response.data.data,
+          });
+        });
         //请求在这里进行
         //如果需要重新画图也在这里画
       },
