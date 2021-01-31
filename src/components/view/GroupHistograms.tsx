@@ -4,7 +4,6 @@ import { createElement, Component, render, createRef } from 'rax';
 import Canvas from 'rax-canvas';
 import DriverUniversal from 'driver-universal';
 import F2 from '@antv/f2';
-import request from 'universal-request';
 import view from 'rax-view';
 import request from 'universal-request';
 
@@ -14,92 +13,10 @@ interface Data {
   name: string;
 }
 
-const data = [
-  {
-    name: '未完成',
-    date: '2021-01-12 0:00',
-    value: 18.9,
-  },
-  {
-    name: '未完成',
-    date: '2021-01-12 3:00',
-    value: 28.8,
-  },
-  {
-    name: '未完成',
-    date: '2021-01-12 6:00',
-    value: 39.3,
-  },
-  {
-    name: '未完成',
-    date: '2021-01-12 9:00',
-    value: 81.4,
-  },
-  {
-    name: '未完成',
-    date: '2021-01-12 12:00',
-    value: 47,
-  },
-  {
-    name: '未完成',
-    date: '2021-01-12 15:00',
-    value: 20.3,
-  },
-  {
-    name: '未完成',
-    date: '2021-01-12 18:00',
-    value: 24,
-  },
-  {
-    name: '未完成',
-    date: '2021-01-12 21:00',
-    value: 35.6,
-  },
-  {
-    name: '已完成',
-    date: '2021-01-12 0:00',
-    value: 12.4,
-  },
-  {
-    name: '已完成',
-    date: '2021-01-12 3:00',
-    value: 23.2,
-  },
-  {
-    name: '已完成',
-    date: '2021-01-12 6:00',
-    value: 34.5,
-  },
-  {
-    name: '已完成',
-    date: '2021-01-12 9:00',
-    value: 99.7,
-  },
-  {
-    name: '已完成',
-    date: '2021-01-12 12:00',
-    value: 52.6,
-  },
-  {
-    name: '已完成',
-    date: '2021-01-12 15:00',
-    value: 35.5,
-  },
-  {
-    name: '已完成',
-    date: '2021-01-12 18:00',
-    value: 37.4,
-  },
-  {
-    name: '已完成',
-    date: '2021-01-12 21:00',
-    value: 42.4,
-  },
-];
-
 let yesterday;
 let today;
 let tomorrow;
+let day;
 
 export default class GroupHistograms extends Component {
   state = {
@@ -118,9 +35,14 @@ export default class GroupHistograms extends Component {
 
   componentDidMount() {
     // 直接发起网络请求
+
+    day = this.state.date.toLocaleDateString().split('/').join('-');
+    console.log('今天', day);
+
     request({
       url: 'http://localhost:8888/todo/getBar',
       method: 'GET',
+      data: { day },
     }).then((response) => {
       this.setState({
         dataSource: response.data.data,
@@ -132,7 +54,7 @@ export default class GroupHistograms extends Component {
           id,
           pixelRatio: window.devicePixelRatio,
         });
-        chart.source(data, {
+        chart.source(this.state.dataSource, {
           date: {
             formatter: function formatter(val) {
               return val.slice(-5, -3);
@@ -186,7 +108,68 @@ export default class GroupHistograms extends Component {
         date: yester,
       },
       () => {
-        console.log('昨天是：', this.state.today);
+        day = this.state.today;
+        day = day.split('/').join('-');
+        console.log('昨天是：', day);
+        request({
+          url: 'http://localhost:8888/todo/getBar',
+          method: 'GET',
+          data: { day },
+        }).then((response) => {
+          this.setState({
+            dataSource: response.data.data,
+          }, () => {
+            // @ts-ignore
+            const { id } = this.raxCanvasDemo.current.props;
+            console.log(id);
+            const chart = new F2.Chart({
+              id,
+              pixelRatio: window.devicePixelRatio,
+            });
+            chart.source(this.state.dataSource, {
+              date: {
+                formatter: function formatter(val) {
+                  return val.slice(-5, -3);
+                },
+              },
+            });
+            chart.tooltip({
+              custom: true, // 自定义 tooltip 内容框
+              onChange(obj) {
+                // @ts-ignore
+                const legend = chart.get('legendController').legends.top[0]; // 获取 legend
+                const tooltipItems = obj.items;
+                const legendItems = legend.items;
+                const map = {};
+                legendItems.map((item) => {
+                  map[item.name] = F2.Util.mix({}, item);
+                });
+                tooltipItems.map((item) => {
+                  const { name, value } = item;
+                  // @ts-ignore
+                  if (map[name]) {
+                    // @ts-ignore
+                    map[name].value = value;
+                  }
+                });
+                legend.setItems(Object.values(map));
+              },
+              onHide(tooltip) {
+                // @ts-ignore
+                const legend = chart.get('legendController').legends.top[0];
+                // @ts-ignore
+                legend.setItems(chart.getLegendItems().country);
+              },
+            });
+
+            chart.interval().position('date*value').color('name').adjust({
+              type: 'dodge',
+              marginRatio: 0.05,
+            });
+            chart.render();
+          });
+          console.log(this.state.dataSource);
+        });
         // 请求在这里进行
         // 如果需要重新画图也在这里画
       },
@@ -202,7 +185,67 @@ export default class GroupHistograms extends Component {
         date: yester,
       },
       () => {
-        console.log('明天是：', this.state.today);
+        day = this.state.today;
+        day = day.split('/').join('-');
+        console.log('明天是：', day);
+        request({
+          url: 'http://localhost:8888/todo/getBar',
+          method: 'GET',
+          data: { day },
+        }).then((response) => {
+          this.setState({
+            dataSource: response.data.data,
+          }, () => {
+            // @ts-ignore
+            const { id } = this.raxCanvasDemo.current.props;
+            console.log(id);
+            const chart = new F2.Chart({
+              id,
+              pixelRatio: window.devicePixelRatio,
+            });
+            chart.source(this.state.dataSource, {
+              date: {
+                formatter: function formatter(val) {
+                  return val.slice(-5, -3);
+                },
+              },
+            });
+            chart.tooltip({
+              custom: true, // 自定义 tooltip 内容框
+              onChange(obj) {
+                // @ts-ignore
+                const legend = chart.get('legendController').legends.top[0]; // 获取 legend
+                const tooltipItems = obj.items;
+                const legendItems = legend.items;
+                const map = {};
+                legendItems.map((item) => {
+                  map[item.name] = F2.Util.mix({}, item);
+                });
+                tooltipItems.map((item) => {
+                  const { name, value } = item;
+                  // @ts-ignore
+                  if (map[name]) {
+                    // @ts-ignore
+                    map[name].value = value;
+                  }
+                });
+                legend.setItems(Object.values(map));
+              },
+              onHide(tooltip) {
+                // @ts-ignore
+                const legend = chart.get('legendController').legends.top[0];
+                // @ts-ignore
+                legend.setItems(chart.getLegendItems().country);
+              },
+            });
+
+            chart.interval().position('date*value').color('name').adjust({
+              type: 'dodge',
+              marginRatio: 0.05,
+            });
+            chart.render();
+          });
+        });
         // 请求在这里进行
         // 如果需要重新画图也在这里画
       },
@@ -241,19 +284,3 @@ export default class GroupHistograms extends Component {
     );
   }
 }
-
-// useEffect(() => {
-//   fetch['GET/todo/getHeat'](
-//     {
-//       // 这里是请求参数
-//     },
-//     {
-//       // 第二参为可选配置
-//       // 请求头 content-type，默认是 'application/json'
-//       contentType: 'application/json',
-//     },
-//   ).then((res) => {
-//     // 使用返回值
-//     setData(res.data);
-//   });
-// }, []);

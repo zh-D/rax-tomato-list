@@ -88,12 +88,13 @@ console.log(source);
 let thisMonday;
 let nextMonday;
 let lastMonday;
+let week;
 
 export default class HeatMap extends Component {
   state = {
     date: new Date(), // 当前Date
     day: new Date().getDay(), // 今天星期几0-6
-    thisWeekBegin: new Date(new Date().getTime() - new Date().getDay() * 25 * (1000 * 60 * 60 * 24)), // 这周第一天的Date对象 星期日
+    thisWeekBegin: new Date(new Date().getTime() - new Date().getDay() * 24 * (1000 * 60 * 60 * 24)), // 这周第一天的Date对象 星期日
     // thisWeekEnd: new Date(new Date().getTime() - (-6 + new Date().getDay()) * (1000 * 60 * 60 * 24)), //这周最后一天的Date对象
     dataSource: [],
   };
@@ -105,13 +106,12 @@ export default class HeatMap extends Component {
     this.nextWeek = this.nextWeek.bind(this);
   }
   componentDidMount() {
-    this.lastWeek();
-    thisMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
+    week = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
 
     request({
       url: 'http://localhost:8888/todo/getHeat',
       method: 'GET',
-      data: { thisMonday },
+      data: { week },
     }).then((response) => {
       this.setState({
         dataSource: response.data.data,
@@ -163,7 +163,6 @@ export default class HeatMap extends Component {
       });
       console.log(this.state.dataSource);
     });
-
   }
 
   lastWeek() {
@@ -180,13 +179,13 @@ export default class HeatMap extends Component {
       },
       () => {
         // 请求写在这里
-        lastMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
-        console.log('上周一是', lastMonday);
+        week = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
+        console.log('上周一是', week);
         // console.log('上周末是', this.state.thisWeekEnd.toLocaleDateString());
         request({
           url: 'http://localhost:8888/todo/getHeat',
           method: 'GET',
-          data: { lastMonday },
+          data: { week },
         }).then((response) => {
           this.setState({
             dataSource: response.data.data,
@@ -252,12 +251,12 @@ export default class HeatMap extends Component {
         thisWeekBegin: nextWeekBegin,
       },
       () => {
-        nextMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
-        console.log('下周一是', nextMonday);
+        week = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
+        console.log('下周一是', week);
         request({
           url: 'http://localhost:8888/todo/getHeat',
           method: 'GET',
-          data: { nextMonday },
+          data: { week },
         }).then((response) => {
           this.setState({
             dataSource: response.data.data,
