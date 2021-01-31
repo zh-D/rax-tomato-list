@@ -371,7 +371,6 @@ const dateList = [
     ['2017-12-30', '十三'],
     ['2017-12-31', '十四']
 ];
-
 var heatmapData = [];
 var lunarData = [];
 for (var i = 0; i < dateList.length; i++) {
@@ -387,38 +386,69 @@ for (var i = 0; i < dateList.length; i++) {
     ]);
 }
 
+// function Maxdays(year,month){
+//     var now = new Date(year,month, 0);
+//     var dayCount = now.getDate();
+//     return dayCount;
+// }
+
 class CanvasSample extends Component  {
-    
+    state={
+        today:'',
+        currentMonth:'',
+        currentYear:'',
+
+    };
   raxCanvasDemo: any;
   constructor(props) {
     super(props);
     this.raxCanvasDemo = createRef()
   }
   componentDidMount() {
-    const id = this.raxCanvasDemo.current.props.id;
-    console.log(id)
+
+    //数据准备
+    //1.获取当前年月及日期
+    var date=new Date();
+    var rangeDate;
+    this.setState({
+        today:date.toLocaleDateString(),
+        currentMonth:(date.getMonth()+1).toString(),
+        currentYear:(date.getFullYear()).toString(),
+
+    },()=>{
+        rangeDate= this.state.currentYear+'-'+this.state.currentMonth;
+        // const id = this.raxCanvasDemo.current.props.id;
+    // console.log(id)
     // 基于准备好的dom，初始化echarts实例
-    const chartDom=document.getElementById(id) as HTMLElement;
+    const chartDom=document.getElementById("main") as HTMLElement;
     console.log(chartDom)
     var myChart = echarts.init(chartDom);
     // 绘制图表
     myChart.setOption({
+        //指定配置项和数据
+
+        //提示框组件
         tooltip: {
+            show:true,
+            trigger:'item',
+            position: 'top',
+            //提示框浮层内容格式器，支持字符串模板和回调函数两种形式。
             formatter: function (params) {
                 return '降雨量: ' + params.value[1].toFixed(2);
             }
         },
-    
+    //视觉映射组件
         visualMap: {
-            show: false,
+            show: false,//是否显示 visualMap-continuous 组件。如果设置为 false，不会显示，但是数据映射的功能还存在
             min: 0,
             max: 300,
-            calculable: true,
-            seriesIndex: [2],
+            //视觉映射的『定义域』
+            calculable: true,//是否显示拖拽用的手柄（手柄能拖拽调整选中范围）
+            seriesIndex: [1],//指定取哪个系列的数据
             orient: 'horizontal',
             left: 'center',
             bottom: 20,
-            inRange: {
+            inRange: {//定义 在选中范围中 的视觉元素。
                 color: ['#e0ffff', '#006edd'],
                 opacity: 0.3
             },
@@ -430,22 +460,26 @@ class CanvasSample extends Component  {
         },
     
         calendar: [{
-            left: 'center',
-            top: 'middle',
-            cellSize: [70, 70],
-            yearLabel: {show: false},
+            left: 'center',//calendar组件离容器左侧的距离
+            top: 'middle',//calendar组件离容器上侧的距离。
+            cellSize: 'auto',//日历每格框的大小，可设置单值 或数组 第一个元素是宽 第二个元素是高。 
+            yearLabel: {show: true},
             orient: 'vertical',
             dayLabel: {
                 firstDay: 1,
-                nameMap: 'cn'
+                nameMap: 'cn',
+                show:true,
             },
             monthLabel: {
-                show: false
+                show: true
             },
-            range: '2017-03'
+            range:rangeDate
         }],
-    
-        series: [{
+    //系列（series）是指：一组数值以及他们映射成的图
+    //一个 系列 包含的要素至少有：一组数值、图表类型（series.type）、以及其他的关于这些数据如何映射成图的参数
+        series: [
+            //散点图
+            {
             type: 'scatter',
             coordinateSystem: 'calendar',
             symbolSize: 1,
@@ -453,26 +487,16 @@ class CanvasSample extends Component  {
                 show: true,
                 formatter: function (params) {
                     var d = echarts.number.parseDate(params.value[0]);
-                    return d.getDate() + '\n\n' + params.value[2] + '\n\n';
+                    return d.getDate(); 
+                    //+ '\n\n' + params.value[2] + '\n\n';
                 },
                 color: '#000'
             },
             data: lunarData
-        }, {
-            type: 'scatter',
-            coordinateSystem: 'calendar',
-            symbolSize: 1,
-            label: {
-                show: true,
-                formatter: function (params) {
-                    return '\n\n\n' + (params.value[3] || '');
-                },
-                fontSize: 14,
-                fontWeight: 700,
-                color: '#a00'
-            },
-            data: lunarData
-        }, {
+        }, 
+    
+        //热力图（降雨量）
+        {
             name: '降雨量',
             type: 'heatmap',
             coordinateSystem: 'calendar',
@@ -480,19 +504,40 @@ class CanvasSample extends Component  {
         }]
     });
 
+
+
+
+
+    })
+    
+    
+
+
+    
+    
   }
 
   render() {
     return (
-        <Canvas
-        style={{
-          width: 750,
-          height: 750,
-        }}
-        //@ts-ignore
-        ref={this.raxCanvasDemo}
-        id="main"
-      />
+        // 为Echarts准备一个具备大小的Dom
+    //     <Canvas
+    //     style={{
+    //       width: 350,
+    //       height: 350,
+    //     }}
+    //     //@ts-ignore
+    //     ref={this.raxCanvasDemo}
+    //     id="main"
+    //   />
+    <div
+    style={{
+      width: 350,
+      height: 350,
+    }}
+    //@ts-ignore
+    ref={this.raxCanvasDemo}
+    id="main"
+  />
     );
   }
 }
