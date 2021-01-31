@@ -264,7 +264,7 @@ export default class GroupHistograms extends Component {
         <Canvas
           style={{
             display: 'block',
-            width: 750,
+            width: 720,
             height: 375,
           }}
           // @ts-ignore
