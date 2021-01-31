@@ -1,7 +1,10 @@
+/* eslint-disable @iceworks/best-practices/no-http-url */
+/* eslint-disable @iceworks/best-practices/recommend-functional-component */
 import { createElement, Component, render, createRef } from 'rax';
 import Canvas from 'rax-canvas';
 import DriverUniversal from 'driver-universal';
 import F2 from '@antv/f2';
+import request from 'universal-request';
 import view from 'rax-view';
 
 interface Data {
@@ -98,73 +101,82 @@ let tomorrow;
 
 export default class GroupHistograms extends Component {
   state = {
-    date: new Date(), //当前日期Date对象
-    today: new Date().getDate(), //当前日期 如2021/1/31
-    data: [],
+    date: new Date(), // 当前日期Date对象
+    today: new Date().getDate(), // 当前日期 如2021/1/31
+    dataSource: [],
   };
   constructor(props) {
     super(props);
     // @ts-ignore
     this.raxCanvasDemo = createRef();
-    //@ts-ignore
+    // @ts-ignore
     this.tomorrow = this.tomorrow.bind(this);
     this.yesterday = this.yesterday.bind(this);
   }
 
   componentDidMount() {
     // 直接发起网络请求
-    // @ts-ignore
-    const { id } = this.raxCanvasDemo.current.props;
-    console.log(id);
-    const chart = new F2.Chart({
-      id,
-      pixelRatio: window.devicePixelRatio,
-    });
-    chart.source(data, {
-      date: {
-        formatter: function formatter(val) {
-          return val.slice(-5, -3);
-        },
-      },
-    });
-    chart.tooltip({
-      custom: true, // 自定义 tooltip 内容框
-      onChange(obj) {
+    request({
+      url: 'http://localhost:8888/todo/getBar',
+      method: 'GET',
+    }).then((response) => {
+      this.setState({
+        dataSource: response.data.data,
+      }, () => {
         // @ts-ignore
-        const legend = chart.get('legendController').legends.top[0]; // 获取 legend
-        const tooltipItems = obj.items;
-        const legendItems = legend.items;
-        const map = {};
-        legendItems.map((item) => {
-          map[item.name] = F2.Util.mix({}, item);
+        const { id } = this.raxCanvasDemo.current.props;
+        console.log(id);
+        const chart = new F2.Chart({
+          id,
+          pixelRatio: window.devicePixelRatio,
         });
-        tooltipItems.map((item) => {
-          const { name, value } = item;
-          // @ts-ignore
-          if (map[name]) {
+        chart.source(data, {
+          date: {
+            formatter: function formatter(val) {
+              return val.slice(-5, -3);
+            },
+          },
+        });
+        chart.tooltip({
+          custom: true, // 自定义 tooltip 内容框
+          onChange(obj) {
             // @ts-ignore
-            map[name].value = value;
-          }
+            const legend = chart.get('legendController').legends.top[0]; // 获取 legend
+            const tooltipItems = obj.items;
+            const legendItems = legend.items;
+            const map = {};
+            legendItems.map((item) => {
+              map[item.name] = F2.Util.mix({}, item);
+            });
+            tooltipItems.map((item) => {
+              const { name, value } = item;
+              // @ts-ignore
+              if (map[name]) {
+                // @ts-ignore
+                map[name].value = value;
+              }
+            });
+            legend.setItems(Object.values(map));
+          },
+          onHide(tooltip) {
+            // @ts-ignore
+            const legend = chart.get('legendController').legends.top[0];
+            // @ts-ignore
+            legend.setItems(chart.getLegendItems().country);
+          },
         });
-        legend.setItems(Object.values(map));
-      },
-      onHide(tooltip) {
-        // @ts-ignore
-        const legend = chart.get('legendController').legends.top[0];
-        // @ts-ignore
-        legend.setItems(chart.getLegendItems().country);
-      },
-    });
 
-    chart.interval().position('date*value').color('name').adjust({
-      type: 'dodge',
-      marginRatio: 0.05,
+        chart.interval().position('date*value').color('name').adjust({
+          type: 'dodge',
+          marginRatio: 0.05,
+        });
+        chart.render();
+      });
     });
-    chart.render();
   }
   yesterday() {
-    var temp = this.state.date.getTime() - 1 * (1000 * 60 * 60 * 24);
-    var yester = new Date();
+    const temp = this.state.date.getTime() - 1 * (1000 * 60 * 60 * 24);
+    const yester = new Date();
     yester.setTime(temp);
     this.setState(
       {
@@ -173,14 +185,14 @@ export default class GroupHistograms extends Component {
       },
       () => {
         console.log('昨天是：', this.state.today);
-        //请求在这里进行
-        //如果需要重新画图也在这里画
+        // 请求在这里进行
+        // 如果需要重新画图也在这里画
       },
     );
   }
   tomorrow() {
-    var temp = this.state.date.getTime() + 1 * (1000 * 60 * 60 * 24);
-    var yester = new Date();
+    const temp = this.state.date.getTime() + 1 * (1000 * 60 * 60 * 24);
+    const yester = new Date();
     yester.setTime(temp);
     this.setState(
       {
@@ -189,8 +201,8 @@ export default class GroupHistograms extends Component {
       },
       () => {
         console.log('明天是：', this.state.today);
-        //请求在这里进行
-        //如果需要重新画图也在这里画
+        // 请求在这里进行
+        // 如果需要重新画图也在这里画
       },
     );
   }
@@ -210,7 +222,7 @@ export default class GroupHistograms extends Component {
             width: 750,
             height: 375,
           }}
-          //@ts-ignore
+          // @ts-ignore
           ref={this.raxCanvasDemo}
           id="canv1"
         />

@@ -1,3 +1,5 @@
+/* eslint-disable @iceworks/best-practices/no-http-url */
+/* eslint-disable @iceworks/best-practices/recommend-functional-component */
 import { createElement, Component, createRef } from 'rax';
 import Canvas from 'rax-canvas';
 import F2 from '@antv/f2';
@@ -72,13 +74,13 @@ const source = [];
 for (let i = 0; i < data.length; i++) {
   const item = data[i];
   const obj = {};
-  //@ts-ignore
+  // @ts-ignore
   obj.hour = item[0];
-  //@ts-ignore
+  // @ts-ignore
   obj.week = item[1];
-  //@ts-ignore
+  // @ts-ignore
   obj.value = item[2];
-  //@ts-ignore
+  // @ts-ignore
   source.push(obj);
 }
 console.log(source);
@@ -89,84 +91,85 @@ let lastMonday;
 
 export default class HeatMap extends Component {
   state = {
-    date: new Date(), //当前Date
-    day: new Date().getDay(), //今天星期几0-6
-    thisWeekBegin: new Date(new Date().getTime() - new Date().getDay() * 30 * (1000 * 60 * 60 * 24)), //这周第一天的Date对象 星期日
+    date: new Date(), // 当前Date
+    day: new Date().getDay(), // 今天星期几0-6
+    thisWeekBegin: new Date(new Date().getTime() - new Date().getDay() * 25 * (1000 * 60 * 60 * 24)), // 这周第一天的Date对象 星期日
     // thisWeekEnd: new Date(new Date().getTime() - (-6 + new Date().getDay()) * (1000 * 60 * 60 * 24)), //这周最后一天的Date对象
     dataSource: [],
   };
   constructor(props) {
     super(props);
-    //@ts-ignore
+    // @ts-ignore
     this.raxCanvasDemo = createRef();
     this.lastWeek = this.lastWeek.bind(this);
     this.nextWeek = this.nextWeek.bind(this);
   }
   componentDidMount() {
+    this.lastWeek();
     thisMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
 
     request({
-      url: 'https://alibaba.github,io/rax/',
+      url: 'http://localhost:8888/todo/getHeat',
       method: 'GET',
       data: { thisMonday },
     }).then((response) => {
       this.setState({
         dataSource: response.data.data,
+      }, () => {
+        // @ts-ignore
+        const { id } = this.raxCanvasDemo.current.props;
+        console.log(id);
+        const chart = new F2.Chart({
+          id,
+          pixelRatio: window.devicePixelRatio,
+        });
+        chart.source(this.state.dataSource, {
+          hour: {
+            type: 'cat',
+            values: ['3', '6', '9', '12', '15', '18', '21', '24'],
+          },
+          week: {
+            type: 'cat',
+            values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
+          },
+        });
+
+        chart.tooltip({
+          custom: true,
+          showXTip: true,
+          showYTip: true,
+          snap: true,
+          crosshairsType: 'xy',
+          crosshairsStyle: {
+            lineDash: [2],
+          },
+        });
+
+        chart
+          .polygon()
+          .position('hour*week')
+          .color('value', '#BAE7FF-#1890FF-#0050B3')
+          .style({
+            lineWidth: 1,
+            stroke: '#fff',
+          })
+          .animate({
+            appear: {
+              animation: 'fadeIn',
+              duration: 800,
+            },
+          });
+        chart.render();
       });
-    });
-    //@ts-ignore
-    const id = this.raxCanvasDemo.current.props.id;
-    console.log(id);
-    const chart = new F2.Chart({
-      id,
-      pixelRatio: window.devicePixelRatio,
-    });
-    chart.source(this.state.dataSource, {
-      hour: {
-        type: 'cat',
-        values: ['3', '6', '9', '12', '15', '18', '21', '24'],
-      },
-      week: {
-        type: 'cat',
-        values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
-      },
+      console.log(this.state.dataSource);
     });
 
-    chart.tooltip({
-      custom: true,
-      showXTip: true,
-      showYTip: true,
-      snap: true,
-      crosshairsType: 'xy',
-      crosshairsStyle: {
-        lineDash: [2],
-      },
-    });
-
-    chart
-      .polygon()
-      .position('hour*week')
-      .color('value', '#BAE7FF-#1890FF-#0050B3')
-      .style({
-        lineWidth: 1,
-        stroke: '#fff',
-      })
-      .animate({
-        appear: {
-          animation: 'fadeIn',
-          duration: 800,
-        },
-      });
-    chart.render();
-    // .getContext();
-    // context.fillStyle = 'red';
-    // context.fillRect(0, 0, 100, 100);
   }
 
   lastWeek() {
-    var lastWeekBeginTemp = this.state.thisWeekBegin.getTime() - 7 * (1000 * 60 * 60 * 24);
+    const lastWeekBeginTemp = this.state.thisWeekBegin.getTime() - 7 * (1000 * 60 * 60 * 24);
     // var lastWeekEndTemp = this.state.thisWeekEnd.getTime() - 7 * (1000 * 60 * 60 * 24);
-    var lastWeekBegin = new Date();
+    const lastWeekBegin = new Date();
     lastWeekBegin.setTime(lastWeekBeginTemp);
     // var lastWeekEnd = new Date();
     // lastWeekEnd.setTime(lastWeekEndTemp);
@@ -176,17 +179,62 @@ export default class HeatMap extends Component {
         // thisWeekEnd: lastWeekEnd,
       },
       () => {
-        //请求写在这里
+        // 请求写在这里
         lastMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
         console.log('上周一是', lastMonday);
         // console.log('上周末是', this.state.thisWeekEnd.toLocaleDateString());
         request({
-          url: 'https://alibaba.github,io/rax/',
+          url: 'http://localhost:8888/todo/getHeat',
           method: 'GET',
           data: { lastMonday },
         }).then((response) => {
           this.setState({
             dataSource: response.data.data,
+          }, () => {
+            // @ts-ignore
+            const { id } = this.raxCanvasDemo.current.props;
+            console.log(id);
+            const chart = new F2.Chart({
+              id,
+              pixelRatio: window.devicePixelRatio,
+            });
+            chart.source(this.state.dataSource, {
+              hour: {
+                type: 'cat',
+                values: ['3', '6', '9', '12', '15', '18', '21', '24'],
+              },
+              week: {
+                type: 'cat',
+                values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
+              },
+            });
+
+            chart.tooltip({
+              custom: true,
+              showXTip: true,
+              showYTip: true,
+              snap: true,
+              crosshairsType: 'xy',
+              crosshairsStyle: {
+                lineDash: [2],
+              },
+            });
+
+            chart
+              .polygon()
+              .position('hour*week')
+              .color('value', '#BAE7FF-#1890FF-#0050B3')
+              .style({
+                lineWidth: 1,
+                stroke: '#fff',
+              })
+              .animate({
+                appear: {
+                  animation: 'fadeIn',
+                  duration: 800,
+                },
+              });
+            chart.render();
           });
         });
       },
@@ -196,29 +244,68 @@ export default class HeatMap extends Component {
   nextWeek() {
     console.log(this.state.date.getDay());
     console.log(this.state.thisWeekBegin);
-    // console.log(this.state.thisWeekEnd);
-    var nextWeekBeginTemp = this.state.thisWeekBegin.getTime() + 7 * (1000 * 60 * 60 * 24);
-    // var nextWeekEndTemp = this.state.thisWeekEnd.getTime() + 7 * (1000 * 60 * 60 * 24);
-    var nextWeekBegin = new Date();
+    const nextWeekBeginTemp = this.state.thisWeekBegin.getTime() + 7 * (1000 * 60 * 60 * 24);
+    const nextWeekBegin = new Date();
     nextWeekBegin.setTime(nextWeekBeginTemp);
-    // var nextWeekEnd = new Date();
-    // nextWeekEnd.setTime(nextWeekEndTemp);
     this.setState(
       {
         thisWeekBegin: nextWeekBegin,
-        // thisWeekEnd: nextWeekEnd,
       },
       () => {
         nextMonday = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
         console.log('下周一是', nextMonday);
-        // console.log('下周末是', this.state.thisWeekEnd.toLocaleDateString());
         request({
-          url: 'https://alibaba.github,io/rax/',
+          url: 'http://localhost:8888/todo/getHeat',
           method: 'GET',
           data: { nextMonday },
         }).then((response) => {
           this.setState({
             dataSource: response.data.data,
+          }, () => {
+            // @ts-ignore
+            const { id } = this.raxCanvasDemo.current.props;
+            console.log(id);
+            const chart = new F2.Chart({
+              id,
+              pixelRatio: window.devicePixelRatio,
+            });
+            chart.source(this.state.dataSource, {
+              hour: {
+                type: 'cat',
+                values: ['3', '6', '9', '12', '15', '18', '21', '24'],
+              },
+              week: {
+                type: 'cat',
+                values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
+              },
+            });
+
+            chart.tooltip({
+              custom: true,
+              showXTip: true,
+              showYTip: true,
+              snap: true,
+              crosshairsType: 'xy',
+              crosshairsStyle: {
+                lineDash: [2],
+              },
+            });
+
+            chart
+              .polygon()
+              .position('hour*week')
+              .color('value', '#BAE7FF-#1890FF-#0050B3')
+              .style({
+                lineWidth: 1,
+                stroke: '#fff',
+              })
+              .animate({
+                appear: {
+                  animation: 'fadeIn',
+                  duration: 800,
+                },
+              });
+            chart.render();
           });
         });
       },
@@ -240,7 +327,7 @@ export default class HeatMap extends Component {
             width: 750,
             height: 375,
           }}
-          //@ts-ignore
+          // @ts-ignore
           ref={this.raxCanvasDemo}
           id="canv2"
         />
