@@ -104,7 +104,7 @@ export default class GroupHistograms extends Component {
   };
   constructor(props) {
     super(props);
-    //@ts-ignore
+    // @ts-ignore
     this.raxCanvasDemo = createRef();
     //@ts-ignore
     this.tomorrow = this.tomorrow.bind(this);
@@ -113,8 +113,8 @@ export default class GroupHistograms extends Component {
 
   componentDidMount() {
     // 直接发起网络请求
-    //@ts-ignore
-    const id = this.raxCanvasDemo.current.props.id;
+    // @ts-ignore
+    const { id } = this.raxCanvasDemo.current.props;
     console.log(id);
     const chart = new F2.Chart({
       id,
@@ -129,8 +129,8 @@ export default class GroupHistograms extends Component {
     });
     chart.tooltip({
       custom: true, // 自定义 tooltip 内容框
-      onChange: function (obj) {
-        //@ts-ignore
+      onChange(obj) {
+        // @ts-ignore
         const legend = chart.get('legendController').legends.top[0]; // 获取 legend
         const tooltipItems = obj.items;
         const legendItems = legend.items;
@@ -140,18 +140,18 @@ export default class GroupHistograms extends Component {
         });
         tooltipItems.map((item) => {
           const { name, value } = item;
-          //@ts-ignore
+          // @ts-ignore
           if (map[name]) {
-            //@ts-ignore
+            // @ts-ignore
             map[name].value = value;
           }
         });
         legend.setItems(Object.values(map));
       },
       onHide(tooltip) {
-        //@ts-ignore
+        // @ts-ignore
         const legend = chart.get('legendController').legends.top[0];
-        //@ts-ignore
+        // @ts-ignore
         legend.setItems(chart.getLegendItems().country);
       },
     });
