@@ -1,12 +1,13 @@
+/* eslint-disable @iceworks/best-practices/no-http-url */
 import { createElement, useEffect, useState, useRef } from 'rax';
 import View from 'rax-view';
-//@ts-ignore
+// @ts-ignore
 import homeImage from '../image/home_background.png';
-//@ts-ignore
+// @ts-ignore
 import menuImage from '../image/home_menu.svg';
-//@ts-ignore
+// @ts-ignore
 import bellImage from '../image/bell.svg';
-//@ts-ignore
+// @ts-ignore
 import addImage from '../image/add.svg';
 import { history } from 'rax-app';
 import Item from './Item';
@@ -40,7 +41,7 @@ export default function TodoList() {
 
   useEffect(() => {
     request({
-      url: 'http://localhost:8888/todo/getHeat',
+      url: 'http://localhost:8888/todo/getList',
       method: 'GET',
     }).then((res) => {
       setdataSource(res.data.data);
@@ -49,18 +50,19 @@ export default function TodoList() {
 
   const onTodoChange = (item) => {
     request({
-      url: 'http://localhost:8888/todo/getHeat',
+      url: 'http://localhost:8888/todo/finish',
       method: 'GET',
-      data: { isFinsh: item.isFinish },
+      data: { isFinish: item.isFinish, id: item._id },
     }).then((res) => {
+      console.log(res);
       setdataSource(res.data.data);
     });
   };
 
   const deleteTodo = (item) => {
     request({
-      url: 'http://localhost:8888/todo/getHeat',
-      method: 'GET',
+      url: 'http://localhost:8888/todo',
+      method: 'DELETE',
       data: { _id: item._id },
     }).then((res) => {
       setdataSource(res.data.data);
@@ -77,15 +79,15 @@ export default function TodoList() {
       </View>
       {dataSource
         ? dataSource.map((item) => {
-            return (
-              <Item
-                key={item._id}
-                item={item}
-                onTodoChange={(item) => onTodoChange(item)}
-                deleteTodo={(item) => deleteTodo(item)}
-              />
-            );
-          })
+          return (
+            <Item
+              key={item._id}
+              item={item}
+              onTodoChange={(item) => onTodoChange(item)}
+              deleteTodo={(item) => deleteTodo(item)}
+            />
+          );
+        })
         : null}
       <View>
         <img
