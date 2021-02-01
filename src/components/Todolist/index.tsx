@@ -42,14 +42,19 @@ import { Data } from './interface';
 export default function TodoList() {
   const [dataSource, setdataSource] = useState<Data[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
-      const res = await request({
-        url: 'http://localhost:8888/todo/getList',
-        method: 'GET',
-      });
-      setdataSource(res.data.data);
+      try {
+        const res = await request({
+          url: 'http://localhost:8888/todo/getList',
+          method: 'GET',
+        });
+        setdataSource(res.data.data);
+      } catch (error) {
+        setIsError(true);
+      }
     };
     setIsLoading(true);
     fetchData();
@@ -58,25 +63,33 @@ export default function TodoList() {
 
   const onTodoChange = async (item: Data): Promise<void> => {
     setIsLoading(true);
-    const res = await request({
-      url: 'http://localhost:8888/todo/finish',
-      method: 'GET',
-      data: { isFinish: String(item.isFinish), id: item._id },
-    });
-    console.log(res.data.data);
-    setdataSource(res.data.data);
+    try {
+      const res = await request({
+        url: 'http://localhost:8888/todo/finish',
+        method: 'GET',
+        data: { isFinish: String(item.isFinish), id: item._id },
+      });
+      console.log(res.data.data);
+      setdataSource(res.data.data);
+    } catch (error) {
+      setIsError(true);
+    }
     setIsLoading(false);
   };
 
   const deleteTodo = async (item: Data): Promise<void> => {
     setIsLoading(true);
-    const res = await request({
-      url: 'http://localhost:8888/todo',
-      method: 'DELETE',
-      data: { _id: item._id },
-    });
-    console.log(res.data.data);
-    setdataSource(res.data.data);
+    try {
+      const res = await request({
+        url: 'http://localhost:8888/todo',
+        method: 'DELETE',
+        data: { _id: item._id },
+      });
+      console.log(res.data.data);
+      setdataSource(res.data.data);
+    } catch (error) {
+      setIsError(true);
+    }
     setIsLoading(false);
   };
   return (

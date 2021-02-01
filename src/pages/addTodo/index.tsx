@@ -13,16 +13,22 @@ import { time } from 'echarts';
 export default function AddTodo() {
   const [newItem, setNewItem] = useState('');
   const [timestamp, setTimestamp] = useState(0);
-
+  const [isError, setIsError] = useState(false);
   useEffect(() => {
     if (timestamp) {
-      request({
-        url: 'http://localhost:8888/todo',
-        method: 'GET',
-        data: { name: newItem },
-      }).then((res) => {
+      const fetchData = async (): Promise<void> => {
+        try {
+          await request({
+            url: 'http://localhost:8888/todo',
+            method: 'GET',
+            data: { name: newItem },
+          });
+        } catch (error) {
+          setIsError(true);
+        }
+        fetchData();
         history.push('/');
-      });
+      };
     }
   });
 
@@ -69,7 +75,9 @@ export default function AddTodo() {
               fontSize: '15px',
             }}
             onClick={() => {
-              setTimestamp(Date.now());
+              if (newItem) {
+                setTimestamp(Date.now());
+              }
             }}
           >
             添加
