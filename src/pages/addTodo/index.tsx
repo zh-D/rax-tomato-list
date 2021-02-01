@@ -1,3 +1,4 @@
+/* eslint-disable @iceworks/best-practices/no-http-url */
 import View from 'rax-view';
 import { createElement, useEffect, useState, useRef } from 'rax';
 import { history } from 'rax-app';
@@ -7,9 +8,24 @@ import back from '../../components/image/back.svg';
 import addImage from '../../components/image/add_event.svg';
 import './index.css';
 import request from 'universal-request';
+import { time } from 'echarts';
 
 export default function AddTodo() {
   const [newItem, setNewItem] = useState('');
+  const [timestamp, setTimestamp] = useState(0);
+
+  useEffect(() => {
+    if (timestamp) {
+      request({
+        url: 'http://localhost:8888/todo',
+        method: 'GET',
+        data: { name: newItem },
+      }).then((res) => {
+        history.push('/');
+      });
+    }
+  });
+
   console.log(newItem);
 
   return (
@@ -27,20 +43,20 @@ export default function AddTodo() {
       <div style={{ textAlign: 'center', marginTop: '15%' }}>
         <img src={addImage} alt="add" height={50} />
       </div>
-      <view class="page-add-todo">
-        <view class="add-todo">
+      <view className="page-add-todo">
+        <view className="add-todo">
           <input
-            class="add-todo-input"
+            className="add-todo-input"
             placeholder="此处添加需要做的事项?"
             onChange={
               // @ts-ignore
-              (e) => setNewItem(e.target.value) //输入的内容
-              //添加事件请求
+              (e) => setNewItem(e.target.value) // 输入的内容
+              // 添加事件请求
             }
           />
         </view>
 
-        <view class="todo-footer">
+        <view className="todo-footer">
           <button
             style={{
               width: '90%',
@@ -53,13 +69,7 @@ export default function AddTodo() {
               fontSize: '15px',
             }}
             onClick={() => {
-              request({
-                url: 'http://localhost:8888/todo/getHeat',
-                method: 'GET',
-                data: { newItem },
-              }).then((res) => {
-                history.push('/');
-              });
+              setTimestamp(Date.now());
             }}
           >
             添加
