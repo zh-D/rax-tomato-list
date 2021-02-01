@@ -12,61 +12,72 @@ import addImage from '../image/add.svg';
 import { history } from 'rax-app';
 import Item from './Item';
 import request from 'universal-request';
+import Text from 'rax-text';
+import { fetch } from '@/rapper';
+import { Data } from './interface';
 
-const Data = [
-  {
-    _id: 1,
-    name: 'event1',
-    isFinish: false,
-  },
-  {
-    _id: 2,
-    name: 'event2',
-    isFinish: false,
-  },
-  {
-    _id: 3,
-    name: 'event3',
-    isFinish: true,
-  },
-  {
-    _id: 4,
-    name: 'event4',
-    isFinish: false,
-  },
-];
+// const Data = [
+//   {
+//     _id: 1,
+//     name: 'event1',
+//     isFinish: false,
+//   },
+//   {
+//     _id: 2,
+//     name: 'event2',
+//     isFinish: false,
+//   },
+//   {
+//     _id: 3,
+//     name: 'event3',
+//     isFinish: true,
+//   },
+//   {
+//     _id: 4,
+//     name: 'event4',
+//     isFinish: false,
+//   },
+// ];
 
 export default function TodoList() {
-  const [dataSource, setdataSource] = useState(Data);
+  const [dataSource, setdataSource] = useState<Data[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    request({
-      url: 'http://localhost:8888/todo/getList',
-      method: 'GET',
-    }).then((res) => {
+    const fetchData = async (): Promise<void> => {
+      const res = await request({
+        url: 'http://localhost:8888/todo/getList',
+        method: 'GET',
+      });
       setdataSource(res.data.data);
-    });
+    };
+    setIsLoading(true);
+    fetchData();
+    setIsLoading(false);
   }, []);
 
-  const onTodoChange = (item) => {
-    request({
+  const onTodoChange = async (item: Data): Promise<void> => {
+    setIsLoading(true);
+    const res = await request({
       url: 'http://localhost:8888/todo/finish',
       method: 'GET',
-      data: { isFinish: item.isFinish, id: item._id },
-    }).then((res) => {
-      console.log(res);
-      setdataSource(res.data.data);
+      data: { isFinish: String(item.isFinish), id: item._id },
     });
+    console.log(res.data.data);
+    setdataSource(res.data.data);
+    setIsLoading(false);
   };
 
-  const deleteTodo = (item) => {
-    request({
+  const deleteTodo = async (item: Data): Promise<void> => {
+    setIsLoading(true);
+    const res = await request({
       url: 'http://localhost:8888/todo',
       method: 'DELETE',
       data: { _id: item._id },
-    }).then((res) => {
-      setdataSource(res.data.data);
     });
+    console.log(res.data.data);
+    setdataSource(res.data.data);
+    setIsLoading(false);
   };
   return (
     <View>
@@ -77,18 +88,24 @@ export default function TodoList() {
         </div>
         <img src={homeImage} />
       </View>
-      {dataSource
-        ? dataSource.map((item) => {
-          return (
-            <Item
-              key={item._id}
-              item={item}
-              onTodoChange={(item) => onTodoChange(item)}
-              deleteTodo={(item) => deleteTodo(item)}
-            />
-          );
-        })
-        : null}
+      {isLoading ? (
+        <View style={{ backgroundColor: 'pink', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: '#f00', fontSize: 30 }}>The Data is Loading ...</Text>
+        </View>
+      ) : dataSource ? (
+        dataSource
+          .sort((x: Data, y: Data) => (x.isFinish === y.isFinish ? 0 : x.isFinish ? -1 : 1))
+          .map((item: Data) => {
+            return (
+              <Item
+                key={item._id}
+                item={item}
+                onTodoChange={(item: Data): Promise<void> => onTodoChange(item)}
+                deleteTodo={(item: Data): Promise<void> => deleteTodo(item)}
+              />
+            );
+          })
+      ) : null}
       <View>
         <img
           src={addImage}
