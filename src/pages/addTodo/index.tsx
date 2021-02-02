@@ -15,7 +15,9 @@ export default function AddTodo() {
   const [timestamp, setTimestamp] = useState(0);
   const [isError, setIsError] = useState(false);
   useEffect(() => {
-    if (timestamp) {
+    console.log(newItem);
+    if (timestamp && newItem) {
+      console.log('lll');
       const fetchData = async (): Promise<void> => {
         try {
           await request({
@@ -26,11 +28,11 @@ export default function AddTodo() {
         } catch (error) {
           setIsError(true);
         }
-        fetchData();
-        history.push('/');
       };
+      fetchData();
+      history.push('/');
     }
-  });
+  }, [timestamp]);
 
   console.log(newItem);
 
@@ -75,9 +77,7 @@ export default function AddTodo() {
               fontSize: '15px',
             }}
             onClick={() => {
-              if (newItem) {
-                setTimestamp(Date.now());
-              }
+              setTimestamp(Date.now());
             }}
           >
             添加
