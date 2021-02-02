@@ -1,4 +1,4 @@
-import { createElement, useEffect, useState, useRef } from 'rax';
+import { createElement } from 'rax';
 import View from 'rax-view';
 // @ts-ignore
 import deleteIcon from '../image/delete.svg';

@@ -1,6 +1,6 @@
 /* eslint-disable @iceworks/best-practices/no-http-url */
 import View from 'rax-view';
-import { createElement, useEffect, useState, useRef } from 'rax';
+import { createElement, useEffect, useState } from 'rax';
 import { history } from 'rax-app';
 // @ts-ignore
 import back from '../../components/image/back.svg';
@@ -8,7 +8,6 @@ import back from '../../components/image/back.svg';
 import addImage from '../../components/image/add_event.svg';
 import './index.css';
 import request from 'universal-request';
-import { time } from 'echarts';
 
 export default function AddTodo() {
   const [newItem, setNewItem] = useState('');

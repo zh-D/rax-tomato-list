@@ -1,4 +1,5 @@
 // src/models/user.ts
+// @ts-ignore
 export const delay = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 export default {

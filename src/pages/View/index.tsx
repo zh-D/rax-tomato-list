@@ -8,24 +8,16 @@ import HeatMap from '../../components/View/HeatMap';
 
 export default function Login() {
   return (
-    <View
-      style={{
-        display: 'flex',
-        width: 750,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-      }}
-    >
-      <View style={{ textAlign: 'center' }}>
+    <View className={styles.container}>
+      <View className={`${styles.top0} ${styles.chart}`}>
         <Text>日管理</Text>
         <GroupHistograms />
       </View>
-      <View style={{ textAlign: 'center', marginTop: 100 }}>
+      <View className={styles.chart}>
         <Text>周管理</Text>
         <HeatMap />
       </View>
-      <View style={{ textAlign: 'center', marginTop: 100 }}>
+      <View className={styles.chart}>
         <Text>月管理</Text>
         <EchartDate />
       </View>

@@ -1,9 +1,8 @@
-
 .todo-items {
   flex-grow: 1;
   font-size: 34rpx;
   padding: 30rpx 120rpx;
-  color:black;
+  color: black;
   overflow: auto;
 }
 
@@ -15,7 +14,7 @@
 .todo-item {
   position: relative;
   margin-bottom: 30rpx;
-  padding-left:80rpx;
+  padding-left: 80rpx;
   line-height: 70rpx;
   height: 80rpx;
   box-sizing: border-box;
@@ -39,7 +38,7 @@
   margin-right: 20rpx;
   width: 45rpx;
   height: 45rpx;
-  background-color:white;
+  background-color: white;
   border-radius: 50%;
   border: 1px solid gray;
   top: 50%;
@@ -68,7 +67,12 @@
 
 .checked .todo-item-text {
   text-decoration: line-through;
+}
+.todo-item-text {
+  display: inline-block;
+  width: 300rpx;
   color: black;
+  overflow: hidden;
 }
 
 .checked.todo-item {
@@ -76,7 +80,7 @@
 }
 
 .checked.todo-item::before {
-  background-color:#f15858;
+  background-color: #f15858;
 }
 
 .checked.todo-item::after {

@@ -1,7 +1,5 @@
 import { createElement, useEffect, useState, useRef } from 'rax';
 import View from 'rax-view';
-// import Text from 'rax-text';
-import request from 'universal-request';
 import store from '@/store';
 import { history } from 'rax-app';
 

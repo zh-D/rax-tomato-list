@@ -1,5 +1,5 @@
 /* eslint-disable @iceworks/best-practices/no-http-url */
-import { createElement, useEffect, useState, useRef } from 'rax';
+import { createElement, useEffect, useState } from 'rax';
 import View from 'rax-view';
 // @ts-ignore
 import homeImage from '../image/home_background.png';
@@ -13,31 +13,7 @@ import { history } from 'rax-app';
 import Item from './Item';
 import request from 'universal-request';
 import Text from 'rax-text';
-import { fetch } from '@/rapper';
 import { Data } from './interface';
-
-// const Data = [
-//   {
-//     _id: 1,
-//     name: 'event1',
-//     isFinish: false,
-//   },
-//   {
-//     _id: 2,
-//     name: 'event2',
-//     isFinish: false,
-//   },
-//   {
-//     _id: 3,
-//     name: 'event3',
-//     isFinish: true,
-//   },
-//   {
-//     _id: 4,
-//     name: 'event4',
-//     isFinish: false,
-//   },
-// ];
 
 export default function TodoList() {
   const [dataSource, setdataSource] = useState<Data[]>([]);
@@ -93,7 +69,7 @@ export default function TodoList() {
     setIsLoading(false);
   };
   return (
-    <View>
+    <View style={{ paddingBottom: 100 }}>
       <View>
         <div style={{ backgroundColor: 'rgb(255 248 248)' }}>
           <img src={menuImage} height={30} style={{ margin: '5rpx 0 0 10rpx' }} />

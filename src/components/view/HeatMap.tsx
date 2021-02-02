@@ -4,8 +4,6 @@ import { createElement, Component, createRef } from 'rax';
 import Canvas from 'rax-canvas';
 import F2 from '@antv/f2';
 import request from 'universal-request';
-import view from 'rax-view';
-
 let week;
 
 export default class HeatMap extends Component {
@@ -22,6 +20,54 @@ export default class HeatMap extends Component {
     this.lastWeek = this.lastWeek.bind(this);
     this.nextWeek = this.nextWeek.bind(this);
   }
+
+  draw() {
+    // @ts-ignore
+    const { id } = this.raxCanvasDemo.current.props;
+    console.log(id);
+    const chart = new F2.Chart({
+      id,
+      pixelRatio: window.devicePixelRatio,
+    });
+    chart.source(this.state.dataSource, {
+      hour: {
+        type: 'cat',
+        values: ['3', '6', '9', '12', '15', '18', '21', '24'],
+      },
+      week: {
+        type: 'cat',
+        values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
+      },
+    });
+
+    chart.tooltip({
+      custom: true,
+      showXTip: true,
+      showYTip: true,
+      snap: true,
+      crosshairsType: 'xy',
+      crosshairsStyle: {
+        lineDash: [2],
+      },
+    });
+
+    chart
+      .polygon()
+      .position('hour*week')
+      .color('value', '#BAE7FF-#1890FF-#0050B3')
+      .style({
+        lineWidth: 1,
+        stroke: '#fff',
+      })
+      .animate({
+        appear: {
+          animation: 'fadeIn',
+          duration: 800,
+        },
+      });
+    chart.render();
+  }
+
   componentDidMount() {
     week = this.state.thisWeekBegin.toLocaleDateString().split('/').join('-');
 
@@ -30,54 +76,14 @@ export default class HeatMap extends Component {
       method: 'GET',
       data: { week },
     }).then((response) => {
-      this.setState({
-        dataSource: response.data.data,
-      }, () => {
-        // @ts-ignore
-        const { id } = this.raxCanvasDemo.current.props;
-        console.log(id);
-        const chart = new F2.Chart({
-          id,
-          pixelRatio: window.devicePixelRatio,
-        });
-        chart.source(this.state.dataSource, {
-          hour: {
-            type: 'cat',
-            values: ['3', '6', '9', '12', '15', '18', '21', '24'],
-          },
-          week: {
-            type: 'cat',
-            values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
-          },
-        });
-
-        chart.tooltip({
-          custom: true,
-          showXTip: true,
-          showYTip: true,
-          snap: true,
-          crosshairsType: 'xy',
-          crosshairsStyle: {
-            lineDash: [2],
-          },
-        });
-
-        chart
-          .polygon()
-          .position('hour*week')
-          .color('value', '#BAE7FF-#1890FF-#0050B3')
-          .style({
-            lineWidth: 1,
-            stroke: '#fff',
-          })
-          .animate({
-            appear: {
-              animation: 'fadeIn',
-              duration: 800,
-            },
-          });
-        chart.render();
-      });
+      this.setState(
+        {
+          dataSource: response.data.data,
+        },
+        () => {
+          this.draw();
+        },
+      );
     });
   }
 
@@ -103,54 +109,14 @@ export default class HeatMap extends Component {
           method: 'GET',
           data: { week },
         }).then((response) => {
-          this.setState({
-            dataSource: response.data.data,
-          }, () => {
-            // @ts-ignore
-            const { id } = this.raxCanvasDemo.current.props;
-            console.log(id);
-            const chart = new F2.Chart({
-              id,
-              pixelRatio: window.devicePixelRatio,
-            });
-            chart.source(this.state.dataSource, {
-              hour: {
-                type: 'cat',
-                values: ['3', '6', '9', '12', '15', '18', '21', '24'],
-              },
-              week: {
-                type: 'cat',
-                values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
-              },
-            });
-
-            chart.tooltip({
-              custom: true,
-              showXTip: true,
-              showYTip: true,
-              snap: true,
-              crosshairsType: 'xy',
-              crosshairsStyle: {
-                lineDash: [2],
-              },
-            });
-
-            chart
-              .polygon()
-              .position('hour*week')
-              .color('value', '#BAE7FF-#1890FF-#0050B3')
-              .style({
-                lineWidth: 1,
-                stroke: '#fff',
-              })
-              .animate({
-                appear: {
-                  animation: 'fadeIn',
-                  duration: 800,
-                },
-              });
-            chart.render();
-          });
+          this.setState(
+            {
+              dataSource: response.data.data,
+            },
+            () => {
+              this.draw();
+            },
+          );
         });
       },
     );
@@ -174,54 +140,14 @@ export default class HeatMap extends Component {
           method: 'GET',
           data: { week },
         }).then((response) => {
-          this.setState({
-            dataSource: response.data.data,
-          }, () => {
-            // @ts-ignore
-            const { id } = this.raxCanvasDemo.current.props;
-            console.log(id);
-            const chart = new F2.Chart({
-              id,
-              pixelRatio: window.devicePixelRatio,
-            });
-            chart.source(this.state.dataSource, {
-              hour: {
-                type: 'cat',
-                values: ['3', '6', '9', '12', '15', '18', '21', '24'],
-              },
-              week: {
-                type: 'cat',
-                values: ['Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.', 'Sun.'],
-              },
-            });
-
-            chart.tooltip({
-              custom: true,
-              showXTip: true,
-              showYTip: true,
-              snap: true,
-              crosshairsType: 'xy',
-              crosshairsStyle: {
-                lineDash: [2],
-              },
-            });
-
-            chart
-              .polygon()
-              .position('hour*week')
-              .color('value', '#BAE7FF-#1890FF-#0050B3')
-              .style({
-                lineWidth: 1,
-                stroke: '#fff',
-              })
-              .animate({
-                appear: {
-                  animation: 'fadeIn',
-                  duration: 800,
-                },
-              });
-            chart.render();
-          });
+          this.setState(
+            {
+              dataSource: response.data.data,
+            },
+            () => {
+              this.draw();
+            },
+          );
         });
       },
     );
@@ -252,13 +178,14 @@ export default class HeatMap extends Component {
             transform: 'translateX(-50%)',
           }}
         >
-          <button onClick={this.lastWeek}>前一周</button>
-          <button onClick={this.nextWeek}>后一周</button>
+          <button className="btn" onClick={this.lastWeek}>
+            前一周
+          </button>
+          <button className="btn" onClick={this.nextWeek}>
+            后一周
+          </button>
         </view>
       </view>
     );
   }
 }
-
-// @ts-ignore
-// render(<CanvasSample />, document.getElementById('root'), { driver: DriverUniversal });
